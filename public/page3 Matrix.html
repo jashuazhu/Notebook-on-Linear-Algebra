@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 3 - Prime Matrix Operations</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <main class="book-page">
+    <header class="book-header">
+      <p class="lead">Chapter 3</p>
+      <h1>Prime Matrix Operations</h1>
+      <p class="muted">Projections, decompositions, and structured linear operators.</p>
+    </header>
+
+        <nav class="chapter-nav">
+      <a href="page2basics.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <a href="page4Eigenvalue.html">Next Chapter -&gt;</a>
+    </nav>
+
+    <article>
+      <div class="grid">
+
+          <!-- 1. Projection Matrices -->
+          <section class="card">
+            <h2>1) Projection Matrices</h2>
+            <div class="formula">
+              A projection matrix $P$ satisfies $P^2=P$.  
+              Orthogonal projection onto $\operatorname{col}(A)$:
+              \[
+                P_A = A(A^\top A)^{-1}A^\top.
+              \]
+              If $A$ has orthonormal columns, then $P_A = AA^\top$.
+            </div>
+            <div class="ex">
+              Let 
+              \(
+                A=\begin{bmatrix}1\\0\end{bmatrix}
+              \Rightarrow
+              P_A=A(A^\top A)^{-1}A^\top=[1][1]^{-1}[1]=[1].
+              \)<br/>
+              For $A=\begin{bmatrix}1\\1\end{bmatrix}$,
+              \[
+                P_A=\frac{1}{2}\begin{bmatrix}1&1\\1&1\end{bmatrix}.
+              \]
+              Applying $P_A$ projects any vector onto $\text{span}\{(1,1)^\top\}$.
+            </div>
+          </section>
+
+          <!-- 2. Permutation Matrices -->
+          <section class="card">
+            <h2>2) Permutation Matrices</h2>
+            <div class="formula">
+              A permutation matrix $P$ has exactly one entry 1 per row and column, zeros elsewhere.  
+              $P$ reorders rows (left-multiplication) or columns (right-multiplication):
+              \[
+                (PA)_{ij}=A_{\pi(i)j},\qquad (AP)_{ij}=A_{i\pi(j)}.
+              \]
+              $P$ is orthogonal: $P^{-1}=P^\top$.
+            </div>
+            <div class="ex">
+              Swap first and second rows:
+              \[
+                P=\begin{bmatrix}0&1\\1&0\end{bmatrix},\quad
+                A=\begin{bmatrix}1&2\\3&4\end{bmatrix},\quad
+                PA=\begin{bmatrix}3&4\\1&2\end{bmatrix}.
+              \]
+              $P^\top P=I$.
+            </div>
+          </section>
+
+          <!-- 3. Orthogonal Matrices -->
+          <section class="card">
+            <h2>3) Orthogonal Matrices</h2>
+            <div class="formula">
+              $Q$ is orthogonal if $Q^\top Q=QQ^\top=I$.  
+              Properties:
+              <ul class="tight">
+                <li>Inverse equals transpose: $Q^{-1}=Q^\top$.</li>
+                <li>Preserves inner product: $(Qx)^\top(Qy)=x^\top y$.</li>
+                <li>Preserves norm: $\|Qx\|=\|x\|$.</li>
+              </ul>
+            </div>
+            <div class="ex">
+              \[
+                Q=\frac{1}{\sqrt{2}}\begin{bmatrix}1&1\\-1&1\end{bmatrix},
+              \]
+              then
+              \(
+                Q^\top Q=I
+              \),
+              and for any vector $x$, $\|Qx\|_2=\|x\|_2$.
+            </div>
+          </section>
+
+          <!-- 4. Positive (Semi)Definite Matrices -->
+          <section class="card">
+            <h2>4) Positive (Semi)Definite Matrices</h2>
+            <div class="formula">
+              A symmetric matrix $A$ is
+              <ul class="tight">
+                <li><em>Positive definite (PD)</em> if $x^\top A x &gt; 0$ for all $x\ne0$.</li>
+                <li><em>Positive semidefinite (PSD)</em> if $x^\top A x \ge 0$ for all $x$.</li>
+              </ul>
+              Equivalent conditions (for symmetric $A$):
+              <ul class="tight">
+                <li>All eigenvalues &gt; 0 (PD) or ≥ 0 (PSD).</li>
+                <li>All leading principal minors &gt; 0 (PD).</li>
+                <li>Exists $L$ lower-triangular s.t. $A=LL^\top$ (Cholesky).</li>
+              </ul>
+            </div>
+            <div class="ex">
+              \[
+                A=\begin{bmatrix}2&-1\\-1&2\end{bmatrix}.
+              \]
+              For any $x=(x_1,x_2)^\top$, 
+              \[
+                x^\top A x = 2x_1^2 - 2x_1x_2 + 2x_2^2 = 2(x_1^2 - x_1x_2 + x_2^2)&gt;0.
+              \]
+              Eigenvalues are $1$ and $3$ ⇒ $A$ is PD.
+            </div>
+          </section>
+
+          <!-- 5. Block Matrices & Schur Complement -->
+          <section class="card">
+            <h2>5) Block Matrices &amp; Schur Complement</h2>
+            <div class="formula">
+              Partition
+              \[
+                A=\begin{bmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{bmatrix}.
+              \]
+              Then, if $A_{11}$ is invertible, the Schur complement of $A_{11}$ in $A$ is
+              \[
+                S=A_{22}-A_{21}A_{11}^{-1}A_{12}.
+              \]
+              Useful for blockwise inversion:
+              \[
+                A^{-1}=
+                \begin{bmatrix}
+                  A_{11}^{-1}+A_{11}^{-1}A_{12}S^{-1}A_{21}A_{11}^{-1}
+                  & -A_{11}^{-1}A_{12}S^{-1}\\[4pt]
+                  -S^{-1}A_{21}A_{11}^{-1} & S^{-1}
+                \end{bmatrix}.
+              \]
+            </div>
+            <div class="ex">
+              Let
+              \[
+                A_{11}=1,\quad A_{12}=2,\quad A_{21}=3,\quad A_{22}=4
+                \Rightarrow
+                S=4-3(1)^{-1}2=-2.
+              \]
+              Hence $S^{-1}=-\tfrac{1}{2}$ and the inverse computed above equals
+              \[
+                A^{-1}=\begin{bmatrix}-2&1\\1.5&-0.5\end{bmatrix},
+              \]
+              same as direct 2×2 inversion.
+            </div>
+          </section>
+
+          <!-- 6. Kronecker Product -->
+          <section class="card">
+            <h2>6) Kronecker Product</h2>
+            <div class="formula">
+              For $A\in\mathbb{R}^{m\times n}$, $B\in\mathbb{R}^{p\times q}$,
+              \[
+                A\otimes B =
+                \begin{bmatrix}
+                  a_{11}B & \cdots & a_{1n}B\\
+                  \vdots & \ddots & \vdots\\
+                  a_{m1}B & \cdots & a_{mn}B
+                \end{bmatrix}\in\mathbb{R}^{mp\times nq}.
+              \]
+              Properties:
+              \[
+                (A\otimes B)(C\otimes D)=(AC)\otimes(BD),\quad
+                (A\otimes B)^\top=A^\top\otimes B^\top.
+              \]
+            </div>
+            <div class="ex">
+              \[
+                A=\begin{bmatrix}1&2\\3&4\end{bmatrix},\;
+                B=\begin{bmatrix}0&5\\6&7\end{bmatrix}.
+              \]
+              Then
+              \[
+                A\otimes B=
+                \begin{bmatrix}
+                  0&5&0&10\\
+                  6&7&12&14\\
+                  0&15&0&20\\
+                  18&21&24&28
+                \end{bmatrix}.
+              \]
+            </div>
+          </section>
+
+          <!-- 7. Hadamard Product -->
+          <section class="card">
+            <h2>7) Hadamard (Elementwise) Product</h2>
+            <div class="formula">
+              For matrices of same size $A,B\in\mathbb{R}^{m\times n}$,
+              \[
+                (A\circ B)_{ij}=A_{ij}B_{ij}.
+              \]
+              Distinct from matrix product.  
+              Schur product theorem: if $A,B$ are PSD, then $A\circ B$ is PSD.
+            </div>
+            <div class="ex">
+              \[
+                A=\begin{bmatrix}1&2\\3&4\end{bmatrix},\quad
+                B=\begin{bmatrix}5&6\\7&8\end{bmatrix}.
+              \]
+              Then
+              \[
+                A\circ B=\begin{bmatrix}1\cdot5&2\cdot6\\3\cdot7&4\cdot8\end{bmatrix}
+                =\begin{bmatrix}5&12\\21&32\end{bmatrix}.
+              \]
+            </div>
+          </section>
+
+          <!-- 8. vec Operator & Kronecker Identity -->
+          <section class="card">
+            <h2>8) vec Operator &amp; Kronecker Identity</h2>
+            <div class="formula">
+              Vectorization stacks columns:
+              \[
+                \operatorname{vec}(X) = 
+                \begin{bmatrix}x_{11}&x_{21}&\dots&x_{m1}&x_{12}&\dots\end{bmatrix}^\top.
+              \]
+              Key identity:
+              \[
+                \operatorname{vec}(AXB) = (B^\top\!\otimes A)\operatorname{vec}(X).
+              \]
+            </div>
+            <div class="ex">
+              For 
+              \(
+                A=\begin{bmatrix}1&0\\0&1\end{bmatrix},\,
+                X=\begin{bmatrix}1&2\\3&4\end{bmatrix},\,
+                B=\begin{bmatrix}0&1\\1&0\end{bmatrix},
+              \)
+              we have
+              \[
+                AXB = XB = 
+                \begin{bmatrix}2&1\\4&3\end{bmatrix}.
+              \]
+              Also,
+              \(
+                (B^\top\!\otimes A)\operatorname{vec}(X)
+              \)
+              gives the same column-reordered vector.
+            </div>
+          </section>
+
+        </div>
+
+        <h2>Summary Properties</h2>
+        <ul class="tight">
+          <li>Projection $P$: $P^2=P$, $P^\top=P$ (if orthogonal).</li>
+          <li>Permutation $P$: orthogonal ($P^{-1}=P^\top$), reorders rows/cols.</li>
+          <li>Orthogonal $Q$: preserves inner products and norms.</li>
+          <li>PSD ⇔ $x^\top A x\ge0$, eigs ≥ 0; PD ⇔ eigs &gt; 0.</li>
+          <li>Schur complement links block inversion.</li>
+          <li>Kronecker: $(A\otimes B)(C\otimes D)=(AC)\otimes(BD)$.</li>
+          <li>Hadamard: elementwise product; if A,B PSD ⇒ A∘B PSD.</li>
+          <li>Vectorization identity: $\operatorname{vec}(AXB)=(B^\top\otimes A)\operatorname{vec}(X)$.</li>
+        </ul>
+    </article>
+
+        <nav class="chapter-nav bottom">
+      <a href="page2basics.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <a href="page4Eigenvalue.html">Next Chapter -&gt;</a>
+    </nav>
+
+    <footer class="site-footer">
+      <p>Digital Notes Series - Chapter 3</p>
+    </footer>
+  </main>
+</body>
+</html>
+
