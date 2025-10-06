@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chapter 2 - Matrix Fundamentals</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Matrix Basics — Operation Rules (Wide Layout)</title>
+
+  <!-- MathJax v3 configuration -->
   <script>
     window.MathJax = {
       tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        displayMath: [['\\[','\\]'], ['$$','$$']],
         processEscapes: true,
         tags: 'ams'
       },
@@ -17,301 +18,329 @@
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #0b1221;
+      --muted: #5f6b7a;
+      --card: #f7f9fc;
+      --border: #e6ecf2;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+      margin: 3rem;
+      line-height: 1.55;
+      max-width: 1500px; /* wide content area */
+    }
+
+    h1 { margin-bottom: 1rem; }
+    h2 { margin-top: 2rem; }
+
+    .grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: 1fr; /* full width per section */
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.5rem;
+      font-size: 1.05rem;
+    }
+
+    .formula { margin: 0.6rem 0 1rem 0; font-size: 1.05rem; }
+    .muted { color: var(--muted); }
+
+    .ex {
+      background: #fff;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-top: 0.75rem;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 1rem;
+      overflow-x: auto;
+    }
+
+    ul.tight { margin: 0.5rem 0 0.8rem 1.5rem; }
+  </style>
 </head>
 <body>
-  <main class="book-page">
-    <header class="book-header">
-      <p class="lead">Chapter 2</p>
-      <h1>Matrix Fundamentals</h1>
-      <p class="muted">Matrix arithmetic, determinants, inverses, and elimination routines.</p>
-    </header>
+  <h1>Matrix Basics — Operation Rules</h1>
+  <p class="muted">Each section includes (1) the mathematical rule and (2) a concrete numeric example.</p>
 
-        <nav class="chapter-nav">
-      <a href="page1basics.html">&lt;- Previous Chapter</a>
-      <a class="index-link" href="index.html">Back to Index</a>
-      <a href="page3 Matrix.html">Next Chapter -&gt;</a>
-    </nav>
+  <div class="grid">
 
-    <article>
-      <div class="grid">
+    <!-- 1. Addition & Scalar Multiplication -->
+    <section class="card">
+      <h2>1) Matrix Addition &amp; Scalar Multiplication</h2>
+      <div class="formula">
+        For $A,B\in\mathbb{R}^{m\times n}$ and scalar $c$:
+        \[
+          (A+B)_{ij} = A_{ij}+B_{ij}, \qquad (cA)_{ij} = c\,A_{ij}.
+        \]
+        Properties:
+        \[
+          A+B = B+A,\quad (A+B)+C = A+(B+C),\quad c(A+B)=cA+cB.
+        \]
+      </div>
+      <div class="ex">
+        Let
+        \[
+          A=\begin{bmatrix}1&2\\3&4\end{bmatrix},\quad
+          B=\begin{bmatrix}-1&0\\5&2\end{bmatrix},\quad c=2.
+        \]
+        Then
+        \[
+          A+B=\begin{bmatrix}0&2\\8&6\end{bmatrix},\qquad
+          cA=\begin{bmatrix}2&4\\6&8\end{bmatrix}.
+        \]
+      </div>
+    </section>
 
-          <!-- 1. Addition & Scalar Multiplication -->
-          <section class="card">
-            <h2>1) Matrix Addition &amp; Scalar Multiplication</h2>
-            <div class="formula">
-              For $A,B\in\mathbb{R}^{m\times n}$ and scalar $c$:
-              \[
-                (A+B)_{ij} = A_{ij}+B_{ij}, \qquad (cA)_{ij} = c\,A_{ij}.
-              \]
-              Properties:
-              \[
-                A+B = B+A,\quad (A+B)+C = A+(B+C),\quad c(A+B)=cA+cB.
-              \]
-            </div>
-            <div class="ex">
-              Let
-              \[
-                A=\begin{bmatrix}1&2\\3&4\end{bmatrix},\quad
-                B=\begin{bmatrix}-1&0\\5&2\end{bmatrix},\quad c=2.
-              \]
-              Then
-              \[
-                A+B=\begin{bmatrix}0&2\\8&6\end{bmatrix},\qquad
-                cA=\begin{bmatrix}2&4\\6&8\end{bmatrix}.
-              \]
-            </div>
-          </section>
+    <!-- 2. Matrix Multiplication -->
+    <section class="card">
+      <h2>2) Matrix Multiplication</h2>
+      <div class="formula">
+        If $A \in\mathbb{R}^{m\times n}$ and $B \in\mathbb{R}^{n\times p}$, then
+        \[
+          (AB)_{ij} = \sum_{k=1}^{n} A_{ik} B_{kj}.
+        \]
+        Not commutative in general: $AB \\ne BA$.
+      </div>
+      <div class="ex">
+        With
+        \[
+          A=\begin{bmatrix}1&2\\3&4\end{bmatrix},\quad
+          B=\begin{bmatrix}-1&0\\5&2\end{bmatrix},
+        \]
+        \[
+          AB=\begin{bmatrix}
+            1(-1)+2(5) & 1(0)+2(2)\\
+            3(-1)+4(5) & 3(0)+4(2)
+          \end{bmatrix}
+          =
+          \begin{bmatrix}9&4\\17&8\end{bmatrix}.
+        \]
+        But
+        \[
+          BA=
+          \begin{bmatrix}
+            -1&0\\5&2
+          \end{bmatrix}
+          \begin{bmatrix}
+            1&2\\3&4
+          \end{bmatrix}
+          =
+          \begin{bmatrix}
+            -1&-2\\11&18
+          \end{bmatrix}
+          \ne AB.
+        \]
+      </div>
+    </section>
 
-          <!-- 2. Matrix Multiplication -->
-          <section class="card">
-            <h2>2) Matrix Multiplication</h2>
-            <div class="formula">
-              If $A \in\mathbb{R}^{m\times n}$ and $B \in\mathbb{R}^{n\times p}$, then
-              \[
-                (AB)_{ij} = \sum_{k=1}^{n} A_{ik} B_{kj}.
-              \]
-              Not commutative in general: $AB \\ne BA$.
-            </div>
-            <div class="ex">
-              With
-              \[
-                A=\begin{bmatrix}1&2\\3&4\end{bmatrix},\quad
-                B=\begin{bmatrix}-1&0\\5&2\end{bmatrix},
-              \]
-              \[
-                AB=\begin{bmatrix}
-                  1(-1)+2(5) & 1(0)+2(2)\\
-                  3(-1)+4(5) & 3(0)+4(2)
-                \end{bmatrix}
-                =
-                \begin{bmatrix}9&4\\17&8\end{bmatrix}.
-              \]
-              But
-              \[
-                BA=
-                \begin{bmatrix}
-                  -1&0\\5&2
-                \end{bmatrix}
-                \begin{bmatrix}
-                  1&2\\3&4
-                \end{bmatrix}
-                =
-                \begin{bmatrix}
-                  -1&-2\\11&18
-                \end{bmatrix}
-                \ne AB.
-              \]
-            </div>
-          </section>
+    <!-- 3. Transpose -->
+    <section class="card">
+      <h2>3) Transpose</h2>
+      <div class="formula">
+        \[
+          (A^\top)_{ij} = A_{ji},\qquad (AB)^\top = B^\top A^\top,\qquad (A^\top)^\top = A.
+        \]
+      </div>
+      <div class="ex">
+        If
+        \[
+          A=\begin{bmatrix}1&2\\3&4\end{bmatrix},\quad
+          B=\begin{bmatrix}-1&0\\5&2\end{bmatrix},
+        \]
+        then
+        \[
+          A^\top=\begin{bmatrix}1&3\\2&4\end{bmatrix},\quad
+          (AB)^\top=\begin{bmatrix}9&17\\4&8\end{bmatrix}^\top=\begin{bmatrix}9&4\\17&8\end{bmatrix}
+          =B^\top A^\top.
+        \]
+      </div>
+    </section>
 
-          <!-- 3. Transpose -->
-          <section class="card">
-            <h2>3) Transpose</h2>
-            <div class="formula">
-              \[
-                (A^\top)_{ij} = A_{ji},\qquad (AB)^\top = B^\top A^\top,\qquad (A^\top)^\top = A.
-              \]
-            </div>
-            <div class="ex">
-              If
-              \[
-                A=\begin{bmatrix}1&2\\3&4\end{bmatrix},\quad
-                B=\begin{bmatrix}-1&0\\5&2\end{bmatrix},
-              \]
-              then
-              \[
-                A^\top=\begin{bmatrix}1&3\\2&4\end{bmatrix},\quad
-                (AB)^\top=\begin{bmatrix}9&17\\4&8\end{bmatrix}^\top=\begin{bmatrix}9&4\\17&8\end{bmatrix}
-                =B^\top A^\top.
-              \]
-            </div>
-          </section>
+    <!-- 4. Trace -->
+    <section class="card">
+      <h2>4) Trace</h2>
+      <div class="formula">
+        \[
+          \operatorname{tr}(A)=\sum_{i=1}^{n} A_{ii},\qquad \operatorname{tr}(AB)=\operatorname{tr}(BA).
+        \]
+      </div>
+      <div class="ex">
+        For
+        \(
+          A=\begin{bmatrix}1&2\\3&4\end{bmatrix}
+        \),
+        \(
+          \operatorname{tr}(A)=1+4=5.
+        \)
+        Using the $AB$ above,
+        \[
+          \operatorname{tr}(AB)=9+8=17,\quad
+          \operatorname{tr}(BA)=-1+18=17.
+        \]
+      </div>
+    </section>
 
-          <!-- 4. Trace -->
-          <section class="card">
-            <h2>4) Trace</h2>
-            <div class="formula">
-              \[
-                \operatorname{tr}(A)=\sum_{i=1}^{n} A_{ii},\qquad \operatorname{tr}(AB)=\operatorname{tr}(BA).
-              \]
-            </div>
-            <div class="ex">
-              For
-              \(
-                A=\begin{bmatrix}1&2\\3&4\end{bmatrix}
-              \),
-              \(
-                \operatorname{tr}(A)=1+4=5.
-              \)
-              Using the $AB$ above,
-              \[
-                \operatorname{tr}(AB)=9+8=17,\quad
-                \operatorname{tr}(BA)=-1+18=17.
-              \]
-            </div>
-          </section>
+    <!-- 5. Determinant -->
+    <section class="card">
+      <h2>5) Determinant &amp; Laplace Expansion</h2>
+      <div class="formula">
+        For $2\times2$:
+        \[
+          \det\!\begin{bmatrix}a&b\\c&d\end{bmatrix}=ad-bc.
+        \]
+        Laplace (cofactor) expansion along row $i$:
+        \[
+          \det(A)=\sum_{j=1}^{n} (-1)^{i+j} A_{ij}\, \det(M_{ij}),
+        \]
+        where $M_{ij}$ is the minor after removing row $i$ and column $j$. Properties:
+        \[
+          \det(AB)=\det(A)\det(B),\quad \det(A^\top)=\det(A).
+        \]
+      </div>
+      <div class="ex">
+        (i) $2\\times2$: For
+        \(
+          A=\begin{bmatrix}1&2\\3&4\end{bmatrix}
+        \),
+        \(
+          \det(A)=1\cdot4-2\cdot3=-2.
+        \)<br/><br/>
+        (ii) $3\\times3$ via Laplace along the first row:
+        \[
+          C=\begin{bmatrix}
+            2&1&0\\
+            -1&3&4\\
+            0&5&1
+          \end{bmatrix},\quad
+          \det(C)=
+          2\det\!\begin{bmatrix}3&4\\5&1\end{bmatrix}
+          -1\det\!\begin{bmatrix}-1&4\\0&1\end{bmatrix}
+          +0\cdot(\cdots).
+        \]
+        Compute minors:
+        \(
+          \det\!\begin{bmatrix}3&4\\5&1\end{bmatrix}=3\cdot1-4\cdot5=-17
+        \),
+        \(
+          \det\!\begin{bmatrix}-1&4\\0&1\end{bmatrix}=-1\cdot1-4\cdot0=-1.
+        \)
+        Hence
+        \(
+          \det(C)=2(-17)-1(-1)=-34+1=-33.
+        \)
+      </div>
+    </section>
 
-          <!-- 5. Determinant -->
-          <section class="card">
-            <h2>5) Determinant &amp; Laplace Expansion</h2>
-            <div class="formula">
-              For $2\times2$:
-              \[
-                \det\!\begin{bmatrix}a&b\\c&d\end{bmatrix}=ad-bc.
-              \]
-              Laplace (cofactor) expansion along row $i$:
-              \[
-                \det(A)=\sum_{j=1}^{n} (-1)^{i+j} A_{ij}\, \det(M_{ij}),
-              \]
-              where $M_{ij}$ is the minor after removing row $i$ and column $j$. Properties:
-              \[
-                \det(AB)=\det(A)\det(B),\quad \det(A^\top)=\det(A).
-              \]
-            </div>
-            <div class="ex">
-              (i) $2\\times2$: For
-              \(
-                A=\begin{bmatrix}1&2\\3&4\end{bmatrix}
-              \),
-              \(
-                \det(A)=1\cdot4-2\cdot3=-2.
-              \)<br/><br/>
-              (ii) $3\\times3$ via Laplace along the first row:
-              \[
-                C=\begin{bmatrix}
-                  2&1&0\\
-                  -1&3&4\\
-                  0&5&1
-                \end{bmatrix},\quad
-                \det(C)=
-                2\det\!\begin{bmatrix}3&4\\5&1\end{bmatrix}
-                -1\det\!\begin{bmatrix}-1&4\\0&1\end{bmatrix}
-                +0\cdot(\cdots).
-              \]
-              Compute minors:
-              \(
-                \det\!\begin{bmatrix}3&4\\5&1\end{bmatrix}=3\cdot1-4\cdot5=-17
-              \),
-              \(
-                \det\!\begin{bmatrix}-1&4\\0&1\end{bmatrix}=-1\cdot1-4\cdot0=-1.
-              \)
-              Hence
-              \(
-                \det(C)=2(-17)-1(-1)=-34+1=-33.
-              \)
-            </div>
-          </section>
+    <!-- 6. Inverse -->
+    <section class="card">
+      <h2>6) Inverse</h2>
+      <div class="formula">
+        $A^{-1}$ satisfies $AA^{-1}=A^{-1}A=I$ and exists iff $\det(A)\neq0$.  
+        For $2\\times2$:
+        \[
+          A^{-1}=\frac{1}{\det(A)}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}.
+        \]
+      </div>
+      <div class="ex">
+        For
+        \(
+          A=\begin{bmatrix}1&2\\3&4\end{bmatrix}
+        \),
+        \(
+          \det(A)=-2
+        \),
+        \[
+          A^{-1}=\frac{1}{-2}\begin{bmatrix}4&-2\\-3&1\end{bmatrix}
+          =\begin{bmatrix}-2&1\\1.5&-0.5\end{bmatrix}.
+        \]
+        Check:
+        \[
+          AA^{-1}=\begin{bmatrix}1&2\\3&4\end{bmatrix}\!\begin{bmatrix}-2&1\\1.5&-0.5\end{bmatrix}
+          =\begin{bmatrix}1&0\\0&1\end{bmatrix}=I.
+        \]
+      </div>
+    </section>
 
-          <!-- 6. Inverse -->
-          <section class="card">
-            <h2>6) Inverse</h2>
-            <div class="formula">
-              $A^{-1}$ satisfies $AA^{-1}=A^{-1}A=I$ and exists iff $\det(A)\neq0$.  
-              For $2\\times2$:
-              \[
-                A^{-1}=\frac{1}{\det(A)}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}.
-              \]
-            </div>
-            <div class="ex">
-              For
-              \(
-                A=\begin{bmatrix}1&2\\3&4\end{bmatrix}
-              \),
-              \(
-                \det(A)=-2
-              \),
-              \[
-                A^{-1}=\frac{1}{-2}\begin{bmatrix}4&-2\\-3&1\end{bmatrix}
-                =\begin{bmatrix}-2&1\\1.5&-0.5\end{bmatrix}.
-              \]
-              Check:
-              \[
-                AA^{-1}=\begin{bmatrix}1&2\\3&4\end{bmatrix}\!\begin{bmatrix}-2&1\\1.5&-0.5\end{bmatrix}
-                =\begin{bmatrix}1&0\\0&1\end{bmatrix}=I.
-              \]
-            </div>
-          </section>
+    <!-- 7. Rank -->
+    <section class="card">
+      <h2>7) Rank</h2>
+      <div class="formula">
+        $\operatorname{rank}(A)$ is the dimension of the column space (equals row space dimension).
+        \[
+          \operatorname{rank}(A) = \text{number of pivots after row-reduction}.
+        \]
+      </div>
+      <div class="ex">
+        Let
+        \[
+          R=\begin{bmatrix}
+            1&2&3\\
+            2&4&6\\
+            1&1&1
+          \end{bmatrix}.
+        \]
+        Note row 2 $=2\\times$ row 1, so it is dependent. After elimination, two pivot rows remain $\Rightarrow \operatorname{rank}(R)=2$.
+      </div>
+    </section>
 
-          <!-- 7. Rank -->
-          <section class="card">
-            <h2>7) Rank</h2>
-            <div class="formula">
-              $\operatorname{rank}(A)$ is the dimension of the column space (equals row space dimension).
-              \[
-                \operatorname{rank}(A) = \text{number of pivots after row-reduction}.
-              \]
-            </div>
-            <div class="ex">
-              Let
-              \[
-                R=\begin{bmatrix}
-                  1&2&3\\
-                  2&4&6\\
-                  1&1&1
-                \end{bmatrix}.
-              \]
-              Note row 2 $=2\\times$ row 1, so it is dependent. After elimination, two pivot rows remain $\Rightarrow \operatorname{rank}(R)=2$.
-            </div>
-          </section>
-
-          <!-- 8. Elementary Matrices & Gaussian Elimination -->
-          <section class="card">
-            <h2>8) Elementary Matrices (for Gaussian Elimination)</h2>
-            <div class="formula">
-              Three types (each corresponds to a single row operation on $I$):
-              <ul class="tight">
-                <li>Row swap $R_i\leftrightarrow R_j$</li>
-                <li>Row scaling $R_i\leftarrow c\,R_i$ ($c\neq0$)</li>
-                <li>Row add $R_i\leftarrow R_i + c\,R_j$</li>
-              </ul>
-              Applying an elementary matrix $E$ to $A$ on the left performs that row operation: $EA$.
-            </div>
-            <div class="ex">
-              Start with
-              \(
-                A=\begin{bmatrix}1&2\\3&4\end{bmatrix}.
-              \)
-              <br/><br/>
-              Row swap ($R_1\\leftrightarrow R_2$):
-              \[
-                E_{\text{swap}}=\begin{bmatrix}0&1\\1&0\end{bmatrix},\quad
-                E_{\text{swap}}A=\begin{bmatrix}3&4\\1&2\end{bmatrix}.
-              \]
-              Row scaling ($R_1\\leftarrow 2R_1$):
-              \[
-                E_{\text{scale}}=\begin{bmatrix}2&0\\0&1\end{bmatrix},\quad
-                E_{\text{scale}}A=\begin{bmatrix}2&4\\3&4\end{bmatrix}.
-              \]
-              Row add ($R_2\\leftarrow R_2 - 3R_1$):
-              \[
-                E_{\text{add}}=\begin{bmatrix}1&0\\-3&1\end{bmatrix},\quad
-                E_{\text{add}}A=\begin{bmatrix}1&2\\0&-2\end{bmatrix}.
-              \]
-              Chaining these yields $PA=LU$ in Gaussian elimination (with permutation $P$).
-            </div>
-          </section>
-
-        </div>
-
-        <h2>Summary Properties</h2>
+    <!-- 8. Elementary Matrices & Gaussian Elimination -->
+    <section class="card">
+      <h2>8) Elementary Matrices (for Gaussian Elimination)</h2>
+      <div class="formula">
+        Three types (each corresponds to a single row operation on $I$):
         <ul class="tight">
-          <li>$(AB)^\top = B^\top A^\top$, $\operatorname{tr}(AB)=\operatorname{tr}(BA)$.</li>
-          <li>$\det(AB)=\det(A)\det(B)$, $\det(A^\top)=\det(A)$, $A$ invertible $\iff \det(A)\neq 0$.</li>
-          <li>$\operatorname{rank}(A)$ = number of pivots (invariant under row operations).</li>
-          <li>Elementary matrices implement single row operations: left-multiplication $EA$.</li>
+          <li>Row swap $R_i\leftrightarrow R_j$</li>
+          <li>Row scaling $R_i\leftarrow c\,R_i$ ($c\neq0$)</li>
+          <li>Row add $R_i\leftarrow R_i + c\,R_j$</li>
         </ul>
-    </article>
+        Applying an elementary matrix $E$ to $A$ on the left performs that row operation: $EA$.
+      </div>
+      <div class="ex">
+        Start with
+        \(
+          A=\begin{bmatrix}1&2\\3&4\end{bmatrix}.
+        \)
+        <br/><br/>
+        Row swap ($R_1\\leftrightarrow R_2$):
+        \[
+          E_{\text{swap}}=\begin{bmatrix}0&1\\1&0\end{bmatrix},\quad
+          E_{\text{swap}}A=\begin{bmatrix}3&4\\1&2\end{bmatrix}.
+        \]
+        Row scaling ($R_1\\leftarrow 2R_1$):
+        \[
+          E_{\text{scale}}=\begin{bmatrix}2&0\\0&1\end{bmatrix},\quad
+          E_{\text{scale}}A=\begin{bmatrix}2&4\\3&4\end{bmatrix}.
+        \]
+        Row add ($R_2\\leftarrow R_2 - 3R_1$):
+        \[
+          E_{\text{add}}=\begin{bmatrix}1&0\\-3&1\end{bmatrix},\quad
+          E_{\text{add}}A=\begin{bmatrix}1&2\\0&-2\end{bmatrix}.
+        \]
+        Chaining these yields $PA=LU$ in Gaussian elimination (with permutation $P$).
+      </div>
+    </section>
 
-        <nav class="chapter-nav bottom">
-      <a href="page1basics.html">&lt;- Previous Chapter</a>
-      <a class="index-link" href="index.html">Back to Index</a>
-      <a href="page3 Matrix.html">Next Chapter -&gt;</a>
-    </nav>
+  </div>
 
-    <footer class="site-footer">
-      <p>Digital Notes Series - Chapter 2</p>
-    </footer>
-  </main>
+  <h2>Summary Properties</h2>
+  <ul class="tight">
+    <li>$(AB)^\top = B^\top A^\top$, $\operatorname{tr}(AB)=\operatorname{tr}(BA)$.</li>
+    <li>$\det(AB)=\det(A)\det(B)$, $\det(A^\top)=\det(A)$, $A$ invertible $\iff \det(A)\neq 0$.</li>
+    <li>$\operatorname{rank}(A)$ = number of pivots (invariant under row operations).</li>
+    <li>Elementary matrices implement single row operations: left-multiplication $EA$.</li>
+  </ul>
 </body>
 </html>
-

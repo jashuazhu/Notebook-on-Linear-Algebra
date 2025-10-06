@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Advanced Applications — Wide Layout</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['\\[','\\]'], ['$$','$$']], processEscapes: true, tags:'ams' },
+    options: { skipHtmlTags:['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+:root { --bg:#fff; --fg:#0b1221; --muted:#5f6b7a; --card:#f7f9fc; --border:#e6ecf2; --accent:#0e7afe;}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);background:var(--bg);margin:3rem;line-height:1.55;max-width:1500px;}
+h1{margin-bottom:1rem;} h2{margin-top:2rem;}
+.grid{display:grid;gap:2rem;grid-template-columns:1fr;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem 2.5rem;font-size:1.05rem;}
+.formula{margin:.6rem 0 1rem 0;} .ex{background:#fff;border:1px dashed var(--border);border-radius:10px;padding:1rem;margin-top:.75rem;font-family:Consolas,"Courier New",monospace;font-size:1rem;overflow-x:auto;}
+details{margin-top:.6rem;background:#fff;border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;}
+details>summary{cursor:pointer;font-weight:600;color:var(--accent);} details>summary::-webkit-details-marker{display:none;}
+.muted{color:var(--muted);}
+</style>
+</head>
+<body>
+<h1>Advanced Applications</h1>
+<p class="muted">Spectral graph theory, PDE Kronecker sums, perturbation bounds, and Riemannian optimization on matrix manifolds.</p>
+
+<div class="grid">
+
+<section class="card">
+  <h2>1) Graph Laplacian Quadratic Form</h2>
+  <p><strong>Background & usage.</strong> Links smoothness of signals on graphs to $L$; basis of spectral clustering and semi-supervised learning.</p>
+  <div class="formula">
+    For weighted graph Laplacian \(L=D-W\),
+    \[
+      x^\top L x=\frac12\sum_{i,j} w_{ij}(x_i-x_j)^2 \ \ge 0.
+    \]
+  </div>
+  <details>
+    <summary>Proof</summary>
+    Expand \(x^\top(D-W)x=\sum_i d_i x_i^2-\sum_{i,j}w_{ij}x_ix_j=\tfrac12\sum_{i,j}w_{ij}(x_i-x_j)^2\).
+  </details>
+  <div class="ex">
+    Example: \(W=\begin{bmatrix}0&1\\1&0\end{bmatrix}\Rightarrow L=\begin{bmatrix}1&-1\\-1&1\end{bmatrix}\).  
+    \(x=[1,2]^\top\Rightarrow x^\top L x=(1/2)\cdot(1\cdot(1-2)^2+1\cdot(2-1)^2)=1\).
+  </div>
+</section>
+
+<section class="card">
+  <h2>2) Cheeger-type Connection (Statement)</h2>
+  <p><strong>Background & usage.</strong> Connects the spectral gap $\lambda_2(L)$ with graph conductance $\phi(G)$; underlies guarantees for spectral clustering.</p>
+  <div class="formula">
+    \[
+      \tfrac{\lambda_2(L)}{2}\ \le\ \phi(G)\ \le\ \sqrt{2\lambda_2(L)}.
+    \]
+  </div>
+  <details>
+    <summary>Proof sketch</summary>
+    Use Rayleigh quotients for \(\lambda_2\) and sweep cuts on the eigenvector to bound conductance; isoperimetric inequalities relate volume-normalized edge cuts to spectral quantities.
+  </details>
+  <div class="ex">
+    Example: Path on 3 nodes has \(L\) eigenvalues \(0,1,3\). Then \(\lambda_2=1\Rightarrow 0.5\le \phi(G)\le \sqrt{2}\).
+  </div>
+</section>
+
+<section class="card">
+  <h2>3) Kronecker Sum for 2D Discrete Laplacian</h2>
+  <p><strong>Background & usage.</strong> Separates variables on grids to enable fast solvers (e.g., via FFT) and eigen-structure reuse.</p>
+  <div class="formula">
+    If \(T\) is the 1D Laplacian (tridiagonal), the 2D Laplacian on an \(m\\times n\) grid is
+    \[
+      \Delta_{2D} = I_n\otimes T_m + T_n\otimes I_m.
+    \]
+  </div>
+  <details>
+    <summary>Proof</summary>
+    Indexing nodes lexicographically, the discrete second differences in \(x\) and \(y\) add; action on \(\operatorname{vec}(X)\) matches the Kronecker sum identity.
+  </details>
+  <div class="ex">
+    Example: \(m=n=2\), \(T_2=\begin{bmatrix}-2&1\\1&-2\end{bmatrix}\).  
+    \(\Delta_{2D}=I_2\otimes T_2+T_2\otimes I_2=\begin{bmatrix}-4&1&1&0\\1&-4&0&1\\1&0&-4&1\\0&1&1&-4\end{bmatrix}\).
+  </div>
+</section>
+
+<section class="card">
+  <h2>4) Davis–Kahan (Eigenvector Perturbation) — Statement</h2>
+  <p><strong>Background & usage.</strong> Bounds subspace rotation under additive noise; vital in PCA and spectral clustering robustness.</p>
+  <div class="formula">
+    For symmetric \(A,\ \tilde A=A+E\), with gap \(\delta\) between target eigenvalue and rest,
+    \[
+      \sin\Theta(\mathcal U,\tilde{\mathcal U}) \ \le\ \frac{\|E\|_2}{\delta}.
+    \]
+  </div>
+  <details>
+    <summary>Proof sketch</summary>
+    Use resolvent identities and Weyl interlacing to bound the off-diagonal block of the spectral projector; take operator norms to get the angle bound.
+  </details>
+  <div class="ex">
+    Example: \(A=\operatorname{diag}(3,1)\), add \(E=\begin{bmatrix}0&\epsilon\\ \epsilon&0\end{bmatrix}\). Gap \(\delta=2\).  
+    Bound: \(\sin\theta\le \epsilon/2\). For \(\epsilon=0.2\), \(\theta\le \arcsin(0.1)\approx 5.7^\circ\).
+  </div>
+</section>
+
+<section class="card">
+  <h2>5) Riemannian Gradient on Stiefel Manifold</h2>
+  <p><strong>Background & usage.</strong> Optimization with orthonormal constraints ($X^\top X=I$) — e.g., PCA, ICA, and dictionary learning.</p>
+  <div class="formula">
+    For Euclidean gradient \(G=\nabla f(X)\) and \(X^\top X=I\), the Riemannian gradient is the tangent projection
+    \[
+      \operatorname{grad} f(X)=G - X\,\operatorname{sym}(X^\top G),\quad \operatorname{sym}(M)=\tfrac12(M+M^\top).
+    \]
+  </div>
+  <details>
+    <summary>Proof</summary>
+    Tangent space at \(X\) is \(\{Z:\ X^\top Z+Z^\top X=0\}\). Project \(G\) onto this space by subtracting the normal component \(X\,\operatorname{sym}(X^\top G)\), yielding the stated formula.
+  </details>
+  <div class="ex">
+    Example: \(X=\begin{bmatrix}1&0\\0&1\\0&0\end{bmatrix}\), \(G=\begin{bmatrix}2&1\\0&3\\5&4\end{bmatrix}\).  
+    \(X^\top G=\begin{bmatrix}2&1\\0&3\end{bmatrix}\Rightarrow \operatorname{sym}=\begin{bmatrix}2&0.5\\0.5&3\end{bmatrix}\).  
+    \(\operatorname{grad} f=G - X\,\operatorname{sym}=\begin{bmatrix}0&0.5\\0&0\\5&4\end{bmatrix}\), which satisfies \(X^\top \operatorname{grad} + (\operatorname{grad})^\top X=0\).
+  </div>
+</section>
+
+</div>
+</body>
+</html>

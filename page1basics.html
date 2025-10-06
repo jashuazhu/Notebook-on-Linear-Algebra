@@ -1,15 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chapter 1 - Vector Foundations</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Vector Basics — Operation Rules (Wide Layout)</title>
+
+  <!-- MathJax v3 configuration -->
   <script>
     window.MathJax = {
       tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        displayMath: [['\\[','\\]'], ['$$','$$']],
         processEscapes: true,
         tags: 'ams'
       },
@@ -17,192 +18,230 @@
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #0b1221;
+      --muted: #5f6b7a;
+      --card: #f7f9fc;
+      --border: #e6ecf2;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+      margin: 3rem;
+      line-height: 1.55;
+      max-width: 1500px; /* wider content area */
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      margin-top: 2rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: 1fr; /* full width per section */
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.5rem;
+      font-size: 1.05rem;
+    }
+
+    .formula {
+      margin: 0.6rem 0 1rem 0;
+      font-size: 1.05rem;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .ex {
+      background: #fff;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-top: 0.75rem;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 1rem;
+    }
+
+    ul.tight {
+      margin: 0.5rem 0 0.8rem 1.5rem;
+    }
+  </style>
 </head>
 <body>
-  <main class="book-page">
-    <header class="book-header">
-      <p class="lead">Chapter 1</p>
-      <h1>Vector Foundations</h1>
-      <p class="muted">Core vector operations with matching worked examples.</p>
-    </header>
+  <h1>Vector Basics — Operation Rules</h1>
+  <p class="muted">Each section includes (1) the mathematical rule and (2) a concrete numeric example.</p>
 
-        <nav class="chapter-nav">
-      <span class="disabled">Previous Chapter</span>
-      <a class="index-link" href="index.html">Back to Index</a>
-      <a href="page2basics.html">Next Chapter -&gt;</a>
-    </nav>
+  <div class="grid">
 
-    <article>
-      <div class="grid">
+    <section class="card">
+      <h2>1) Vectors & Components</h2>
+      <div class="formula">
+        A vector in $\mathbb{R}^n$ is $\mathbf{x} = (x_1, \dots, x_n)^\top = \sum_{i=1}^n x_i \mathbf{e}_i$,  
+        where $\mathbf{e}_i$ are the standard basis vectors.
+      </div>
+      <div class="ex">
+        Example (in $\mathbb{R}^3$): $\mathbf{x} = (2, -1, 4)^\top = 2\mathbf{e}_1 - \mathbf{e}_2 + 4\mathbf{e}_3$.
+      </div>
+    </section>
 
-          <section class="card">
-            <h2>1) Vectors & Components</h2>
-            <div class="formula">
-              A vector in $\mathbb{R}^n$ is $\mathbf{x} = (x_1, \dots, x_n)^\top = \sum_{i=1}^n x_i \mathbf{e}_i$,  
-              where $\mathbf{e}_i$ are the standard basis vectors.
-            </div>
-            <div class="ex">
-              Example in $ \mathbb{R}^3 $ : $ \mathbf{x} = (2, -1, 4)^\top = 2\mathbf{e}_1 - \mathbf{e}_2 + 4\mathbf{e}_3 $.
-            </div>
-          </section>
-          <section class="card">
-            <h2>2) Addition & Scalar Multiplication</h2>
-            <div class="formula">
-              <p>Vector addition and scalar multiplication:</p>  
-                \[
-                     \mathbf{u} + \mathbf{v} = (u_1 + v_1, \ldots, u_n + v_n)^\top, \qquad
-                    c\mathbf{v} = (c v_1, \ldots, c v_n)^\top.
-                \]
+    <section class="card">
+      <h2>2) Addition & Scalar Multiplication</h2>
+      <div class="formula">
+        \[
+          \mathbf{u} + \mathbf{v} = (u_1 + v_1, \ldots, u_n + v_n)^\top, \qquad
+          c\mathbf{v} = (c v_1, \ldots, c v_n)^\top.
+        \]
+        Properties: commutativity, associativity, and distributivity:
+        \[
+          \mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}, \quad
+          (\mathbf{u} + \mathbf{v}) + \mathbf{w} = \mathbf{u} + (\mathbf{v} + \mathbf{w}), \quad
+          c(\mathbf{u} + \mathbf{v}) = c\mathbf{u} + c\mathbf{v}.
+        \]
+      </div>
+      <div class="ex">
+        Let $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$, $c = 2$.<br/>
+        $\mathbf{u} + \mathbf{v} = (1+4, -2+0, 3-1) = (5, -2, 2)$.<br/>
+        $c\mathbf{u} = (2, -4, 6)$.
+      </div>
+    </section>
 
-            <p>Properties: commutativity, associativity, and distributivity:</p>
+    <section class="card">
+      <h2>3) Linear Combinations & Span</h2>
+      <div class="formula">
+        \[
+          \alpha\mathbf{u} + \beta\mathbf{v}, \quad \mathrm{span}\{\mathbf{u}, \mathbf{v}\} = 
+          \{ \alpha\mathbf{u} + \beta\mathbf{v} \mid \alpha,\beta\in\mathbb{R} \}.
+        \]
+      </div>
+      <div class="ex">
+        With $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$, $(\alpha, \beta) = (2, -1)$:<br/>
+        $2\mathbf{u} - \mathbf{v} = (2, -4, 6) - (4, 0, -1) = (-2, -4, 7)$.
+      </div>
+    </section>
 
-                \[
-                    \mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}, \quad
-                    (\mathbf{u} + \mathbf{v}) + \mathbf{w} = \mathbf{u} + (\mathbf{v} + \mathbf{w}), \quad
-                    c(\mathbf{u} + \mathbf{v}) = c\mathbf{u} + c\mathbf{v}.
-                \]        
-            </div>
-            <div class="ex">
-              Let $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$, $c = 2$.<br/>
-              $\mathbf{u} + \mathbf{v} = (1+4, -2+0, 3-1) = (5, -2, 2)$.<br/>
-              $c\mathbf{u} = (2, -4, 6)$.
-            </div>
-          </section>
+    <section class="card">
+      <h2>4) Dot Product & Angle</h2>
+      <div class="formula">
+        \[
+          \mathbf{u}\cdot\mathbf{v} = \sum_{i=1}^n u_i v_i = \mathbf{u}^\top\mathbf{v}, \qquad
+          \cos\theta = \frac{\mathbf{u}\cdot\mathbf{v}}{\|\mathbf{u}\|\|\mathbf{v}\|}.
+        \]
+      </div>
+      <div class="ex">
+        $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$.<br/>
+        $\mathbf{u}\cdot\mathbf{v} = 1\cdot4 + (-2)\cdot0 + 3\cdot(-1) = 1$.<br/>
+        $\|\mathbf{u}\| = \sqrt{14}$, $\|\mathbf{v}\| = \sqrt{17}$, so $\cos\theta = \frac{1}{\sqrt{14}\sqrt{17}}$.
+      </div>
+    </section>
 
-          <section class="card">
-            <h2>3) Linear Combinations & Span</h2>
-            <div class="formula">
-              \[
-                \alpha\mathbf{u} + \beta\mathbf{v}, \quad \mathrm{span}\{\mathbf{u}, \mathbf{v}\} = 
-                \{ \alpha\mathbf{u} + \beta\mathbf{v} \mid \alpha,\beta\in\mathbb{R} \}.
-              \]
-            </div>
-            <div class="ex">
-              With $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$, $(\alpha, \beta) = (2, -1)$:<br/>
-              $2\mathbf{u} - \mathbf{v} = (2, -4, 6) - (4, 0, -1) = (-2, -4, 7)$.
-            </div>
-          </section>
+    <section class="card">
+      <h2>5) Norms & Distance</h2>
+      <div class="formula">
+        \[
+          \|\mathbf{x}\|_2 = \sqrt{\sum_i x_i^2}, \quad
+          \|\mathbf{x}\|_1 = \sum_i |x_i|, \quad
+          \|\mathbf{x}\|_\infty = \max_i |x_i|.
+        \]
+        Distance: $d(\mathbf{x}, \mathbf{y}) = \|\mathbf{x} - \mathbf{y}\|$.
+      </div>
+      <div class="ex">
+        For $\mathbf{u} = (1, -2, 3)$:<br/>
+        $\|\mathbf{u}\|_2 = \sqrt{14}$, $\|\mathbf{u}\|_1 = 6$, $\|\mathbf{u}\|_\infty = 3$.
+      </div>
+    </section>
 
-          <section class="card">
-            <h2>4) Dot Product & Angle</h2>
-            <div class="formula">
-              \[
-                \mathbf{u}\cdot\mathbf{v} = \sum_{i=1}^n u_i v_i = \mathbf{u}^\top\mathbf{v}, \qquad
-                \cos\theta = \frac{\mathbf{u}\cdot\mathbf{v}}{\|\mathbf{u}\|\|\mathbf{v}\|}.
-              \]
-            </div>
-            <div class="ex">
-              $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$.<br/>
-              $\mathbf{u}\cdot\mathbf{v} = 1\cdot4 + (-2)\cdot0 + 3\cdot(-1) = 1$.<br/>
-              $\|\mathbf{u}\| = \sqrt{14}$, $\|\mathbf{v}\| = \sqrt{17}$, so $\cos\theta = \frac{1}{\sqrt{14}\sqrt{17}}$.
-            </div>
-          </section>
+    <section class="card">
+      <h2>6) Unit Vectors & Orthonormality</h2>
+      <div class="formula">
+        Normalize: $\hat{\mathbf{x}} = \frac{\mathbf{x}}{\|\mathbf{x}\|}$.  
+        Orthonormal set $\{\mathbf{q}_i\}$ satisfies $\mathbf{q}_i^\top\mathbf{q}_j = \delta_{ij}$.
+      </div>
+      <div class="ex">
+        Normalize $\mathbf{v} = (4, 0, -1)$: $\hat{\mathbf{v}} = \frac{1}{\sqrt{17}}(4, 0, -1)$.
+      </div>
+    </section>
 
-          <section class="card">
-            <h2>5) Norms & Distance</h2>
-            <div class="formula">
-              \[
-                \|\mathbf{x}\|_2 = \sqrt{\sum_i x_i^2}, \quad
-                \|\mathbf{x}\|_1 = \sum_i |x_i|, \quad
-                \|\mathbf{x}\|_\infty = \max_i |x_i|.
-              \]
-              Distance: $d(\mathbf{x}, \mathbf{y}) = \|\mathbf{x} - \mathbf{y}\|$.
-            </div>
-            <div class="ex">
-              For $\mathbf{u} = (1, -2, 3)$:<br/>
-              $\|\mathbf{u}\|_2 = \sqrt{14}$, $\|\mathbf{u}\|_1 = 6$, $\|\mathbf{u}\|_\infty = 3$.
-            </div>
-          </section>
+    <section class="card">
+      <h2>7) Projection onto a Vector</h2>
+      <div class="formula">
+        \[
+          \mathrm{proj}_{\mathbf{v}}(\mathbf{u}) = \frac{\mathbf{u}\cdot\mathbf{v}}{\mathbf{v}\cdot\mathbf{v}}\,\mathbf{v}.
+        \]
+      </div>
+      <div class="ex">
+        $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$:<br/>
+        $\mathbf{u}\cdot\mathbf{v} = 1$, $\mathbf{v}\cdot\mathbf{v} = 17$.<br/>
+        $\mathrm{proj}_{\mathbf{v}}(\mathbf{u}) = \frac{1}{17}(4, 0, -1) = \left(\tfrac{4}{17}, 0, -\tfrac{1}{17}\right)$.
+      </div>
+    </section>
 
-          <section class="card">
-            <h2>6) Unit Vectors & Orthonormality</h2>
-            <div class="formula">
-              Normalize: $\hat{\mathbf{x}} = \frac{\mathbf{x}}{\|\mathbf{x}\|}$.  
-              Orthonormal set $\{\mathbf{q}_i\}$ satisfies $\mathbf{q}_i^\top\mathbf{q}_j = \delta_{ij}$.
-            </div>
-            <div class="ex">
-              Normalize $\mathbf{v} = (4, 0, -1)$: $\hat{\mathbf{v}} = \frac{1}{\sqrt{17}}(4, 0, -1)$.
-            </div>
-          </section>
+    <section class="card">
+      <h2>8) Cross Product (in $\mathbb{R}^3$)</h2>
+      <div class="formula">
+        \[
+          \mathbf{u}\times\mathbf{v} =
+          (u_2v_3 - u_3v_2,\; u_3v_1 - u_1v_3,\; u_1v_2 - u_2v_1),
+        \]
+        and $\|\mathbf{u}\times\mathbf{v}\| = \|\mathbf{u}\|\|\mathbf{v}\|\sin\theta$.
+      </div>
+      <div class="ex">
+        $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$.  
+        $\mathbf{u}\times\mathbf{v} = (2, 13, 8)$.
+      </div>
+    </section>
 
-          <section class="card">
-            <h2>7) Projection onto a Vector</h2>
-            <div class="formula">
-              \[
-                \mathrm{proj}_{\mathbf{v}}(\mathbf{u}) = \frac{\mathbf{u}\cdot\mathbf{v}}{\mathbf{v}\cdot\mathbf{v}}\,\mathbf{v}.
-              \]
-            </div>
-            <div class="ex">
-              $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$:<br/>
-              $\mathbf{u}\cdot\mathbf{v} = 1$, $\mathbf{v}\cdot\mathbf{v} = 17$.<br/>
-              $\mathrm{proj}_{\mathbf{v}}(\mathbf{u}) = \frac{1}{17}(4, 0, -1) = \left(\tfrac{4}{17}, 0, -\tfrac{1}{17}\right)$.
-            </div>
-          </section>
+    <section class="card">
+      <h2>9) Triangle Inequality & Parallelogram Law</h2>
+      <div class="formula">
+        \[
+          \|\mathbf{u} + \mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|, \qquad
+          \|\mathbf{u}+\mathbf{v}\|^2 + \|\mathbf{u}-\mathbf{v}\|^2
+          = 2\|\mathbf{u}\|^2 + 2\|\mathbf{v}\|^2.
+        \]
+      </div>
+      <div class="ex">
+        $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$.<br/>
+        $\|\mathbf{u}+\mathbf{v}\| = \sqrt{33} \le \sqrt{14} + \sqrt{17}$ (true).<br/>
+        $33 + 29 = 62 = 2(14) + 2(17)$.
+      </div>
+    </section>
 
-          <section class="card">
-            <h2>8) Cross Product (in $\mathbb{R}^3$)</h2>
-            <div class="formula">
-              \[
-                \mathbf{u}\times\mathbf{v} =
-                (u_2v_3 - u_3v_2,\; u_3v_1 - u_1v_3,\; u_1v_2 - u_2v_1),
-              \]
-              and $\|\mathbf{u}\times\mathbf{v}\| = \|\mathbf{u}\|\|\mathbf{v}\|\sin\theta$.
-            </div>
-            <div class="ex">
-              $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$.  
-              $\mathbf{u}\times\mathbf{v} = (2, 13, 8)$.
-            </div>
-          </section>
+    <section class="card">
+      <h2>10) Componentwise (Hadamard) Operations</h2>
+      <div class="formula">
+        Componentwise product: $(\mathbf{u}\circ\mathbf{v})_i = u_i v_i$.
+      </div>
+      <div class="ex">
+        $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$.<br/>
+        $\mathbf{u}\circ\mathbf{v} = (4, 0, -3)$.
+      </div>
+    </section>
 
-          <section class="card">
-            <h2>9) Triangle Inequality & Parallelogram Law</h2>
-            <div class="formula">
-              \[
-                \|\mathbf{u} + \mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|, \qquad
-                \|\mathbf{u}+\mathbf{v}\|^2 + \|\mathbf{u}-\mathbf{v}\|^2
-                = 2\|\mathbf{u}\|^2 + 2\|\mathbf{v}\|^2.
-              \]
-            </div>
-            <div class="ex">
-              $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$.<br/>
-              $\|\mathbf{u}+\mathbf{v}\| = \sqrt{33} \le \sqrt{14} + \sqrt{17}$ (true).<br/>
-              $33 + 29 = 62 = 2(14) + 2(17)$.
-            </div>
-          </section>
+  </div>
 
-          <section class="card">
-            <h2>10) Componentwise (Hadamard) Operations</h2>
-            <div class="formula">
-              Componentwise product: $(\mathbf{u}\circ\mathbf{v})_i = u_i v_i$.
-            </div>
-            <div class="ex">
-              $\mathbf{u} = (1, -2, 3)$, $\mathbf{v} = (4, 0, -1)$.<br/>
-              $\mathbf{u}\circ\mathbf{v} = (4, 0, -3)$.
-            </div>
-          </section>
-
-        </div>
-
-        <h2>Summary Properties</h2>
-        <ul class="tight">
-          <li>Linearity: $(\alpha\mathbf{u}+\beta\mathbf{v})\cdot\mathbf{w}=\alpha(\mathbf{u}\cdot\mathbf{w})+\beta(\mathbf{v}\cdot\mathbf{w})$.</li>
-          <li>Orthogonality: $\mathbf{u}\perp\mathbf{v}\iff \mathbf{u}\cdot\mathbf{v}=0$.</li>
-          <li>Normalization: $\hat{\mathbf{u}}=\mathbf{u}/\|\mathbf{u}\|$.</li>
-          <li>Projection: $\mathrm{proj}_{\mathbf{v}}(\mathbf{u})=(\mathbf{u}\cdot\mathbf{v})/(\mathbf{v}\cdot\mathbf{v})\mathbf{v}$.</li>
-          <li>Cross product is perpendicular to both operands in $\mathbb{R}^3$.</li>
-        </ul>
-    </article>
-
-        <nav class="chapter-nav bottom">
-      <span class="disabled">Previous Chapter</span>
-      <a class="index-link" href="index.html">Back to Index</a>
-      <a href="page2basics.html">Next Chapter -&gt;</a>
-    </nav>
-
-    <footer class="site-footer">
-      <p>Digital Notes Series - Chapter 1</p>
-    </footer>
-  </main>
+  <h2>Summary Properties</h2>
+  <ul class="tight">
+    <li>Linearity: $(\alpha\mathbf{u}+\beta\mathbf{v})\cdot\mathbf{w}=\alpha(\mathbf{u}\cdot\mathbf{w})+\beta(\mathbf{v}\cdot\mathbf{w})$.</li>
+    <li>Orthogonality: $\mathbf{u}\perp\mathbf{v}\iff \mathbf{u}\cdot\mathbf{v}=0$.</li>
+    <li>Normalization: $\hat{\mathbf{u}}=\mathbf{u}/\|\mathbf{u}\|$.</li>
+    <li>Projection: $\mathrm{proj}_{\mathbf{v}}(\mathbf{u})=(\mathbf{u}\cdot\mathbf{v})/(\mathbf{v}\cdot\mathbf{v})\mathbf{v}$.</li>
+    <li>Cross product is perpendicular to both operands in $\mathbb{R}^3$.</li>
+  </ul>
 </body>
 </html>
-

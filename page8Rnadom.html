@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Random Matrices — Wide Layout</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['\\[','\\]'], ['$$','$$']], processEscapes: true, tags:'ams' },
+    options: { skipHtmlTags:['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+:root { --bg:#fff; --fg:#0b1221; --muted:#5f6b7a; --card:#f7f9fc; --border:#e6ecf2; --accent:#0e7afe;}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);background:var(--bg);margin:3rem;line-height:1.55;max-width:1500px;}
+h1{margin-bottom:1rem;} h2{margin-top:2rem;}
+.grid{display:grid;gap:2rem;grid-template-columns:1fr;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem 2.5rem;font-size:1.05rem;}
+.formula{margin:.6rem 0 1rem 0;} .ex{background:#fff;border:1px dashed var(--border);border-radius:10px;padding:1rem;margin-top:.75rem;font-family:Consolas,"Courier New",monospace;font-size:1rem;overflow-x:auto;}
+details{margin-top:.6rem;background:#fff;border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;}
+details>summary{cursor:pointer;font-weight:600;color:var(--accent);} details>summary::-webkit-details-marker{display:none;}
+.muted{color:var(--muted);}
+</style>
+</head>
+<body>
+<h1>Random Matrices</h1>
+<p class="muted">Wishart covariance models, Marchenko–Pastur and Wigner laws — with usage and illustrative calculations.</p>
+
+<div class="grid">
+
+<section class="card">
+  <h2>1) Wishart Distribution & Mean</h2>
+  <p><strong>Background & usage.</strong> If $x_i\\sim\\mathcal N(0,\\Sigma)$ i.i.d., the sample covariance $S=\\sum x_i x_i^\top$ is Wishart. Used in multivariate statistics and ML covariance estimation.</p>
+  <div class="formula">
+    If \(x_i\\sim\\mathcal N(0,\Sigma)\) and \(S=\sum_{i=1}^n x_i x_i^\top\), then \(S\\sim W_p(n,\Sigma)\) and
+    \[
+      \mathbb E[S]=n\,\Sigma.
+    \]
+  </div>
+  <details>
+    <summary>Proof</summary>
+    \(\mathbb E[x_i x_i^\top]=\Sigma\) by definition of covariance; linearity gives \(\mathbb E[S]=\sum \mathbb E[x_i x_i^\top]=n\Sigma\).
+  </details>
+  <div class="ex">
+    Example: \(\Sigma=\begin{bmatrix}2&0\\0&1\end{bmatrix}\), \(n=3\) ⇒ \(\mathbb E[S]=\operatorname{diag}(6,3)\).
+  </div>
+</section>
+
+<section class="card">
+  <h2>2) Marchenko–Pastur (MP) Law (Statement)</h2>
+  <p><strong>Background & usage.</strong> Describes limiting eigenvalue distribution of sample covariance when $p,n\\to\\infty$ with $p/n\\to\\gamma$; crucial in high-dimensional PCA.</p>
+  <div class="formula">
+    For \(X\\in\\mathbb{R}^{p\\times n}\) with i.i.d. entries of variance 1, eigenvalues of \(\tfrac{1}{n}XX^\top\) converge in distribution to MP with density on
+    \[
+      \big[(1-\sqrt{\gamma})^2,\ (1+\sqrt{\gamma})^2\big],\qquad \gamma=\lim p/n.
+    \]
+  </div>
+  <details>
+    <summary>Proof sketch</summary>
+    Use Stieltjes transform and moment method: match moments of \(\tfrac{1}{n}XX^\top\) with Catalan numbers scaled by \(\gamma\); apply analytic inversion to obtain MP density and support.
+  </details>
+  <div class="ex">
+    Example: \(\gamma=1/4\Rightarrow (1\pm \tfrac12)^2\in[0.25,\ 2.25]\). In practice, eigenvalues of \(\tfrac{1}{n}XX^\top\) lie mostly in this interval for large \(n\).
+  </div>
+</section>
+
+<section class="card">
+  <h2>3) Wigner Semicircle Law (Statement)</h2>
+  <p><strong>Background & usage.</strong> Governs eigenvalues of large symmetric matrices with i.i.d. centered entries; appears in physics and combinatorics.</p>
+  <div class="formula">
+    For symmetric \(W_n\) with i.i.d. entries (mean 0, variance \(1/n\)), the empirical eigenvalue distribution converges to density
+    \[
+      \rho(x)=\frac{1}{2\pi}\sqrt{4-x^2}\ \ \text{on }[-2,2].
+    \]
+  </div>
+  <details>
+    <summary>Proof sketch</summary>
+    Moment method: \(\mathbb E[\tfrac1n\operatorname{tr}(W_n^k)]\) counts non-crossing pairings; normalized moments converge to Catalan numbers, whose generating function yields the semicircle density.
+  </details>
+  <div class="ex">
+    Example: Take \(W=\begin{bmatrix}0&1&-1\\1&0&1\\-1&1&0\end{bmatrix}/\sqrt{3}\). Numerically its eigenvalues lie within \([-2,2]\) and cluster near the semicircle shape as \(n\) grows.
+  </div>
+</section>
+
+<section class="card">
+  <h2>4) Concentration of Sample Covariance (Heuristic Bound)</h2>
+  <p><strong>Background & usage.</strong> Shows deviation of empirical covariance from true covariance in operator norm; informs sample complexity for PCA/estimation.</p>
+  <div class="formula">
+    For sub-Gaussian $x_i\\in\\mathbb{R}^p$ with covariance $\Sigma$, with high probability
+    \[
+      \left\| \frac{1}{n}\sum_{i=1}^n x_i x_i^\top - \Sigma \right\|_2
+      \lesssim \|\Sigma\|_2\left(\sqrt{\frac{p}{n}}+\frac{p}{n}\right).
+    \]
+  </div>
+  <details>
+    <summary>Proof sketch</summary>
+    Use matrix Bernstein (or Vershynin’s sub-Gaussian tail bounds) on centered matrices \(x_i x_i^\top-\Sigma\) and take a union bound over an \(\epsilon\)-net on the sphere.
+  </details>
+  <div class="ex">
+    Example: \(p=50,n=200,\ \|\Sigma\|_2=3\Rightarrow\) RHS \(\approx 3(\sqrt{0.25}+0.25)=3(0.5+0.25)=2.25\).
+  </div>
+</section>
+
+</div>
+</body>
+</html>
