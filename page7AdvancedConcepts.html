@@ -1,152 +1,162 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Advanced Matrix Concepts — Wide Layout</title>
-<script>
-  window.MathJax = {
-    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['\\[','\\]'], ['$$','$$']], processEscapes: true, tags:'ams' },
-    options: { skipHtmlTags:['script','noscript','style','textarea','pre','code'] }
-  };
-</script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<style>
-:root { --bg:#fff; --fg:#0b1221; --muted:#5f6b7a; --card:#f7f9fc; --border:#e6ecf2; --accent:#0e7afe;}
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);background:var(--bg);margin:3rem;line-height:1.55;max-width:1500px;}
-h1{margin-bottom:1rem;} h2{margin-top:2rem;}
-.grid{display:grid;gap:2rem;grid-template-columns:1fr;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem 2.5rem;font-size:1.05rem;}
-.formula{margin:.6rem 0 1rem 0;} .ex{background:#fff;border:1px dashed var(--border);border-radius:10px;padding:1rem;margin-top:.75rem;font-family:Consolas,"Courier New",monospace;font-size:1rem;overflow-x:auto;}
-details{margin-top:.6rem;background:#fff;border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;}
-details>summary{cursor:pointer;font-weight:600;color:var(--accent);} details>summary::-webkit-details-marker{display:none;}
-.muted{color:var(--muted);}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 7 - Advanced Matrix Concepts</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-<h1>Advanced Matrix Concepts</h1>
-<p class="muted">Pseudoinverse, condition number, spectral norm, matrix exponential, Lyapunov equation, and vec–Kronecker identity.</p>
+  <main class="book-page">
+    <header class="book-header">
+      <p class="lead">Chapter 7</p>
+      <h1>Advanced Matrix Concepts</h1>
+      <p class="muted">Pseudoinverses, conditioning, matrix norms, exponential, Lyapunov equations, and vec&ndash;Kronecker tools.</p>
+    </header>
 
-<div class="grid">
+    <nav class="chapter-nav">
+      <a href="page6Factorizations.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <a href="page8Random.html">Next Chapter -&gt;</a>
+    </nav>
 
-<section class="card">
-  <h2>1) Moore–Penrose Pseudoinverse via SVD</h2>
-  <p><strong>Background & usage.</strong> Provides least-norm solutions to $Ax=b$ when $A$ is rank-deficient or rectangular; central in regression and inverse problems.</p>
-  <div class="formula">
-    If \(A=U\Sigma V^\top\) with \(\Sigma=\operatorname{diag}(\sigma_i)\), define \(\Sigma^+=\operatorname{diag}(\sigma_i^{-1}\ \text{if }\sigma_i>0)\). Then
-    \[
-      A^+=V\Sigma^+ U^\top
-    \]
-    satisfies the Penrose conditions.
-  </div>
-  <details>
-    <summary>Proof (Penrose conditions)</summary>
-    Verify: (i) \(AA^+A=A\) using \(U\Sigma V^\top V\Sigma^+U^\top U\Sigma V^\top=A\).  
-    (ii) \(A^+AA^+=A^+\).  
-    (iii) \((AA^+)^\top=AA^+\) and (iv) \((A^+A)^\top=A^+A\) since \(U,V\) orthogonal and \(\Sigma,\Sigma^+\) diagonal real.
-  </details>
-  <div class="ex">
-    Example: \(A=\begin{bmatrix}1&0\\0&0\\0&1\end{bmatrix}\) (3×2). SVD yields \(\sigma_1=\sigma_2=1\), \(U=I_3\) on span, \(V=I_2\). Then \(A^+=\begin{bmatrix}1&0&0\\0&0&1\end{bmatrix}\). Check \(AA^+A=A\).
-  </div>
-</section>
+    <article>
+      <div class="grid">
 
-<section class="card">
-  <h2>2) Condition Number (2–norm)</h2>
-  <p><strong>Background & usage.</strong> Measures sensitivity of linear solves and least squares to data perturbations; large $\kappa_2$ implies potential numerical instability.</p>
-  <div class="formula">
-    \[
-      \kappa_2(A)=\|A\|_2\|A^{-1}\|_2=\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}.
-    \]
-  </div>
-  <details>
-    <summary>Proof</summary>
-    Since \(\|A\|_2=\max_{\|x\|=1}\|Ax\|=\sigma_{\max}\) and \(\|A^{-1}\|_2=\sigma_{\max}(A^{-1})=1/\sigma_{\min}(A)\), multiply to get \(\kappa_2=\sigma_{\max}/\sigma_{\min}\).
-  </details>
-  <div class="ex">
-    Example: \(A=\begin{bmatrix}3&0\\0&1\end{bmatrix}\Rightarrow \sigma_{\max}=3,\ \sigma_{\min}=1\Rightarrow \kappa_2=3\).
-  </div>
-</section>
+        <section class="card">
+          <h2>1) Moore&ndash;Penrose Pseudoinverse via SVD</h2>
+          <p><strong>Background &amp; usage.</strong> Provides least norm solutions to $Ax = b$ when $A$ is rank deficient or rectangular; central in regression and inverse problems.</p>
+          <div class="formula">
+            If $A = U \Sigma V^\top$ with $\Sigma = \operatorname{diag}(\sigma_i)$, define $\Sigma^+ = \operatorname{diag}(\sigma_i^{-1}$ when $\sigma_i &gt; 0)$ and
+            \[
+              A^+ = V \Sigma^+ U^\top,
+            \]
+            which satisfies the Penrose conditions.
+          </div>
+          <details>
+            <summary>Proof sketch</summary>
+            Check: (i) $A A^+ A = A$ because $U \Sigma V^\top V \Sigma^+ U^\top U \Sigma V^\top = A$. (ii) $A^+ A A^+ = A^+$. (iii) $(A A^+)^\top = A A^+$ and (iv) $(A^+ A)^\top = A^+ A$ since $U$ and $V$ are orthogonal with real diagonal $\Sigma$, $\Sigma^+$.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}1 & 0\\ 0 & 0\\ 0 & 1\end{bmatrix}$ (3\times2). The SVD has $\sigma_1 = \sigma_2 = 1$, $U = I_3$ on the column space, $V = I_2$, so $A^+ = \begin{bmatrix}1 & 0 & 0\\ 0 & 0 & 1\end{bmatrix}$.
+          </div>
+        </section>
 
-<section class="card">
-  <h2>3) Spectral Norm equals Largest Singular Value</h2>
-  <p><strong>Background & usage.</strong> The induced 2–norm is the operator norm compatible with Euclidean geometry; used in stability and Lipschitz bounds.</p>
-  <div class="formula">
-    \[
-      \|A\|_2=\max_{\|x\|=1}\|Ax\|=\sqrt{\lambda_{\max}(A^\top A)}=\sigma_{\max}(A).
-    \]
-  </div>
-  <details>
-    <summary>Proof</summary>
-    \(\|Ax\|^2=x^\top A^\top A x\). Maximizing over unit vectors yields the largest Rayleigh quotient, equal to \(\lambda_{\max}(A^\top A)\). Taking square roots gives the identity.
-  </details>
-  <div class="ex">
-    Example: \(A=\begin{bmatrix}0&2\\0&0\end{bmatrix}\Rightarrow A^\top A=\begin{bmatrix}0&0\\0&4\end{bmatrix}\).  
-    \(\|A\|_2=\sqrt{4}=2=\sigma_{\max}\).
-  </div>
-</section>
+        <section class="card">
+          <h2>2) Condition Number in the 2-Norm</h2>
+          <p><strong>Background &amp; usage.</strong> Measures sensitivity of linear solves and least squares to perturbations; large $\kappa_2$ signals potential numerical instability.</p>
+          <div class="formula">
+            \[
+              \kappa_2(A) = \|A\|_2 \|A^{-1}\|_2 = \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}.
+            \]
+          </div>
+          <details>
+            <summary>Proof</summary>
+            Since $\|A\|_2 = \max_{\|x\|=1} \|Ax\| = \sigma_{\max}(A)$ and $\|A^{-1}\|_2 = \sigma_{\max}(A^{-1}) = 1 / \sigma_{\min}(A)$, multiplying yields the expression.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}3 & 0\\ 0 & 1\end{bmatrix}$ has $\sigma_{\max} = 3$, $\sigma_{\min} = 1$, so $\kappa_2 = 3$.
+          </div>
+        </section>
 
-<section class="card">
-  <h2>4) Matrix Exponential Derivative</h2>
-  <p><strong>Background & usage.</strong> Fundamental in linear ODEs $\dot x=Ax$ and continuous-time Markov chains.</p>
-  <div class="formula">
-    \[
-      \frac{d}{dt}e^{tA}=Ae^{tA}=e^{tA}A.
-    \]
-  </div>
-  <details>
-    <summary>Proof (power series)</summary>
-    \(e^{tA}=\sum_{k\ge0}\frac{t^k}{k!}A^k\). Differentiate termwise: \(\sum_{k\ge1}\frac{k t^{k-1}}{k!}A^k=A\sum_{k\ge0}\frac{t^k}{k!}A^k=Ae^{tA}\).
-  </details>
-  <div class="ex">
-    Example: \(A=\begin{bmatrix}0&1\\0&0\end{bmatrix}\Rightarrow e^{tA}=I+tA=\begin{bmatrix}1&t\\0&1\end{bmatrix}\).  
-    Derivative \(=A e^{tA}=\begin{bmatrix}0&1\\0&0\end{bmatrix}\begin{bmatrix}1&t\\0&1\end{bmatrix}=\begin{bmatrix}0&1\\0&0\end{bmatrix}\).
-  </div>
-</section>
+        <section class="card">
+          <h2>3) Spectral Norm and Largest Singular Value</h2>
+          <p><strong>Background &amp; usage.</strong> The induced 2-norm is the operator norm compatible with Euclidean geometry; used in stability and Lipschitz bounds.</p>
+          <div class="formula">
+            \[
+              \|A\|_2 = \max_{\|x\|=1} \|Ax\| = \sqrt{\lambda_{\max}(A^\top A)} = \sigma_{\max}(A).
+            \]
+          </div>
+          <details>
+            <summary>Proof</summary>
+            Because $\|Ax\|^2 = x^\top A^\top A x$, maximizing over unit vectors yields the largest Rayleigh quotient, equal to $\lambda_{\max}(A^\top A)$. Taking square roots gives the identity.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}0 & 2\\ 0 & 0\end{bmatrix}$ gives $A^\top A = \begin{bmatrix}0 & 0\\ 0 & 4\end{bmatrix}$ and $\|A\|_2 = 2 = \sigma_{\max}(A)$.
+          </div>
+        </section>
 
-<section class="card">
-  <h2>5) Lyapunov Equation Solution (Hurwitz $A$)</h2>
-  <p><strong>Background & usage.</strong> Certifies stability and computes steady-state covariance; key in control/Kalman filtering.</p>
-  <div class="formula">
-    If all eigenvalues of \(A\) satisfy \(\Re \lambda&lt;0\) and \(Q\\succ0\), then the unique \(X\\succ0\) solving
-    \[
-      A^\top X + X A = -Q
-    \]
-    is
-    \[
-      X=\int_{0}^{\infty} e^{A^\top t} Q\, e^{A t}\, dt.
-    \]
-  </div>
-  <details>
-    <summary>Proof</summary>
-    Differentiate \(e^{A^\top t} X e^{At}\) and integrate from \(0\) to \(\infty\). Using \(\frac{d}{dt}e^{At}=Ae^{At}\) and stability (terms vanish at \(\infty\)), one gets
-    \(-\!X=\int_0^\infty\! e^{A^\top t}(A^\top X+XA)e^{At}dt\). Setting \(A^\top X+XA=-Q\) yields the integral representation and uniqueness by linearity and positivity.
-  </details>
-  <div class="ex">
-    Example: \(A=\begin{bmatrix}-1&0\\0&-2\end{bmatrix}\), \(Q=I\).  
-    \(e^{At}=\operatorname{diag}(e^{-t},e^{-2t})\). Integral gives  
-    \(X=\operatorname{diag}\big(\int_0^\infty e^{-2t}dt,\ \int_0^\infty e^{-4t}dt\big)=\operatorname{diag}(1/2,1/4)\).  
-    Check: \(A^\top X+XA=-I\).
-  </div>
-</section>
+        <section class="card">
+          <h2>4) Derivative of the Matrix Exponential</h2>
+          <p><strong>Background &amp; usage.</strong> Fundamental in linear ODEs $\dot{x} = Ax$ and continuous-time Markov chains.</p>
+          <div class="formula">
+            \[
+              \frac{d}{dt} e^{tA} = A e^{tA} = e^{tA} A.
+            \]
+          </div>
+          <details>
+            <summary>Proof</summary>
+            Expand $e^{tA} = \sum_{k \ge 0} \frac{t^k}{k!} A^k$. Differentiating termwise gives $\sum_{k \ge 1} \frac{k t^{k-1}}{k!} A^k = A \sum_{k \ge 0} \frac{t^k}{k!} A^k = A e^{tA}$.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}0 & 1\\ 0 & 0\end{bmatrix}$ has $e^{tA} = I + tA = \begin{bmatrix}1 & t\\ 0 & 1\end{bmatrix}$. Differentiating yields $A e^{tA}$ as expected.
+          </div>
+        </section>
 
-<section class="card">
-  <h2>6) Vec–Kronecker Identity</h2>
-  <p><strong>Background & usage.</strong> Linearizes bilinear forms; crucial in deriving Jacobians and solving matrix equations.</p>
-  <div class="formula">
-    \[
-      \operatorname{vec}(AXB)=(B^\top\otimes A)\operatorname{vec}(X).
-    \]
-  </div>
-  <details>
-    <summary>Proof</summary>
-    Write \(Y=AXB\). The \((i,j)\)-entry is \(y_{ij}=\sum_{k,\ell} a_{ik}x_{k\ell}b_{\ell j}\). Stack columns of \(Y\) and reorder sums to match the action of \((B^\top\otimes A)\) on \(\operatorname{vec}(X)\).
-  </details>
-  <div class="ex">
-    Example: \(A=\begin{bmatrix}1&0\\2&1\end{bmatrix}\), \(B=\begin{bmatrix}0&1\\1&0\end{bmatrix}\), \(X=\begin{bmatrix}1&2\\3&4\end{bmatrix}\).  
-    Compute \(AXB\) directly and compare with \((B^\top\otimes A)\operatorname{vec}(X)\) — both match.
-  </div>
-</section>
+        <section class="card">
+          <h2>5) Lyapunov Equation Solution (Hurwitz $A$)</h2>
+          <p><strong>Background &amp; usage.</strong> Certifies stability and steady-state covariance; key in control and Kalman filtering.</p>
+          <div class="formula">
+            If all eigenvalues of $A$ satisfy $\Re \lambda &lt; 0$ and $Q \succ 0$, the unique $X \succ 0$ solving
+            \[
+              A^\top X + X A = -Q
+            \]
+            is
+            \[
+              X = \int_{0}^{\infty} e^{A^\top t} Q e^{A t} \, dt.
+            \]
+          </div>
+          <details>
+            <summary>Proof sketch</summary>
+            Differentiate $e^{A^\top t} X e^{A t}$ and integrate from $0$ to $\infty$. Using $\frac{d}{dt} e^{A t} = A e^{A t}$ and the stability assumption (limit at $\infty$ vanishes) yields $-X = \int_0^\infty e^{A^\top t} (A^\top X + X A) e^{A t} dt$. Imposing $A^\top X + X A = -Q$ gives the integral representation.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}-1 & 0\\ 0 & -2\end{bmatrix}$, $Q = I$. Then $e^{A t} = \operatorname{diag}(e^{-t}, e^{-2t})$ and $X = \operatorname{diag}\big(\tfrac{1}{2}, \tfrac{1}{4}\big)$ solves $A^\top X + X A = -I$.
+          </div>
+        </section>
 
-</div>
+        <section class="card">
+          <h2>6) Vec&ndash;Kronecker Identity</h2>
+          <p><strong>Background &amp; usage.</strong> Linearizes bilinear forms; crucial in deriving Jacobians and solving matrix equations.</p>
+          <div class="formula">
+            \[
+              \operatorname{vec}(A X B) = (B^\top \otimes A) \operatorname{vec}(X).
+            \]
+          </div>
+          <details>
+            <summary>Proof</summary>
+            Writing $Y = A X B$, the $(i,j)$ entry is $y_{ij} = \sum_{k, \ell} a_{ik} x_{k \ell} b_{\ell j}$. Stacking the columns of $Y$ and reordering sums matches the action of $(B^\top \otimes A)$ on $\operatorname{vec}(X)$.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}1 & 0\\ 2 & 1\end{bmatrix}$, $B = \begin{bmatrix}0 & 1\\ 1 & 0\end{bmatrix}$, $X = \begin{bmatrix}1 & 2\\ 3 & 4\end{bmatrix}$. Computing $A X B$ directly agrees with $(B^\top \otimes A) \operatorname{vec}(X)$.
+          </div>
+        </section>
+
+      </div>
+    </article>
+
+    <nav class="chapter-nav bottom">
+      <a href="page6Factorizations.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <a href="page8Random.html">Next Chapter -&gt;</a>
+    </nav>
+
+    <footer class="site-footer">
+      <p>Digital Notes Series - Chapter 7</p>
+    </footer>
+  </main>
 </body>
 </html>
+

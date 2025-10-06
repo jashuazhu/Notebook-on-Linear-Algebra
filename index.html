@@ -1,202 +1,106 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Vector & Matrix Operations – Review Sheet</title>
-
-  <!-- MathJax v3 config: enable $...$ and \( ... \) for inline math -->
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['\\[', '\\]'], ['$$','$$']],
-        processEscapes: true,
-        tags: 'ams'
-      },
-      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
-    };
-  </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; margin: 2rem; }
-    h1, h2, h3 { margin-top: 1.2em; }
-    ul { margin: .4em 0 .8em 1.2em; }
-    code { background: #f6f8fa; padding: .1em .3em; border-radius: 4px; }
-    .section { margin-bottom: 1.2rem; }
-    .muted { color: #666; }
-  </style>
+  <title>Digital Book Index</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-	<h1 style="text-align: center;">Vector &amp; Matrix Operations – Review Sheet</h1>
-	<p class="muted" style="text-align: center;">By Zhu Group @JHU @Groton School</p>
+  <main class="book-page">
+    <header class="book-header">
+      <p class="lead">Digital Compendium</p>
+      <h1>My Notebook for Linear Algebra</h1>
+      <p> By Zhu`s Group @ JHU @ Groton School</p>
+      <p> Created automatically via Codex, Credited to OpenAI, For our personal reference only</p>
+    </header>
 
-  <!-- 1. Vector Basics -->
-  <div class="section">
-    <h2>1) Vector Basics</h2>
-    <ul>
-      <li><strong>Vector</strong> in $\mathbb{R}^n$: ordered $n$-tuple; standard basis $e_i$.</li>
-      <li><strong>Add &amp; scale</strong>: $\mathbf{u}+\mathbf{v}$, $c\mathbf{v}$; affine combos, convex combos.</li>
-      <li><strong>Inner product</strong>: $\mathbf{u}\cdot \mathbf{v}=\sum_i u_i v_i$; induces norm $\|\mathbf{v}\|_2=\sqrt{\mathbf{v}^\top\mathbf{v}}$.</li>
-      <li><strong>Norms</strong>: $\ell_p$; $\|\mathbf{v}\|_\infty=\max_i |v_i|$; dual norms.</li>
-      <li><strong>Cross product</strong> (only $\mathbb{R}^3$): $\mathbf{u}\times\mathbf{v}$ orthogonal to both.</li>
-      <li><strong>Orthonormality</strong>: $\mathbf{u}^\top\mathbf{v}=0$, $\|\mathbf{u}\|=1$; Gram–Schmidt.</li>
-    </ul>
-  </div>
+    <section class="table-of-contents" aria-labelledby="toc-heading">
+      <h2 id="toc-heading">Chapters</h2>
+      <ol>
+        <li>
+          <span class="chapter-number"></span>
+          <div class="chapter-entry">
+            <a href="page1basics.html">Vector Foundations</a>
+            <p>Vectors, norms, and geometric intuition for fundamental operations.</p>
+          </div>
+        </li>
+        <li>
+          <span class="chapter-number"></span>
+          <div class="chapter-entry">
+            <a href="page2basics.html">Matrix Fundamentals</a>
+            <p>Matrix arithmetic, determinants, inverses, and elimination workflows.</p>
+          </div>
+        </li>
+        <li>
+          <span class="chapter-number"></span>
+          <div class="chapter-entry">
+            <a href="page3 Matrix.html">Prime Matrix Operations</a>
+            <p>Projections, decompositions, and structured linear transforms.</p>
+          </div>
+        </li>
+        <li>
+          <span class="chapter-number"></span>
+          <div class="chapter-entry">
+            <a href="page4Eigenvalue.html">Spectral Insights</a>
+            <p>Eigenvalues, eigenvectors, and singular value explorations.</p>
+          </div>
+        </li>
+        <li>
+          <span class="chapter-number"></span>
+          <div class="chapter-entry">
+            <a href="page5Calculus.html">Matrix Calculus</a>
+            <p>Gradients, Jacobians, and differentials for scalar and matrix-valued maps.</p>
+          </div>
+        </li>
+        <li>
+          <span class="chapter-number"></span>
+          <div class="chapter-entry">
+            <a href="page6Factorizations.html">Matrix Factorizations</a>
+            <p>LU, QR, Cholesky, SVD, and polar decompositions with practical examples.</p>
+          </div>
+        </li>
+        <li>
+          <span class="chapter-number"></span>
+          <div class="chapter-entry">
+            <a href="page7AdvancedConcepts.html">Advanced Matrix Concepts</a>
+            <p>Moore&ndash;Penrose pseudoinverse, spectral norms, conditioning, exponential, and Lyapunov theory.</p>
+          </div>
+        </li>
+        <li>
+          <span class="chapter-number"></span>
+          <div class="chapter-entry">
+            <a href="page8Random.html">Random Matrices &amp; Probability</a>
+            <p>Wishart models, Marchenko&ndash;Pastur, semicircle law, and covariance concentration heuristics.</p>
+          </div>
+        </li>
+        <li>
+          <span class="chapter-number"></span>
+          <div class="chapter-entry">
+            <a href="page9ML.html">Applications in Optimization &amp; ML</a>
+            <p>Least squares, ridge regression, PCA, low rank approximation, and logistic regression curvature.</p>
+          </div>
+        </li>
+        <li>
+          <span class="chapter-number"></span>
+          <div class="chapter-entry">
+            <a href="page10more.html">Advanced Applications</a>
+            <p>Spectral graph tools, Kronecker sums, perturbation bounds, and Riemannian optimization.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
 
-  <!-- 2. Matrix Basics -->
-  <div class="section">
-    <h2>2) Matrix Basics</h2>
-    <ul>
-      <li><strong>Shapes</strong>: $A\in\mathbb{R}^{m\times n}$; rows, columns, sparsity.</li>
-      <li><strong>Operations</strong>: $A+B$, $cA$, $AB$ with $(AB)_{ij}=\sum_k A_{ik}B_{kj}$.</li>
-      <li><strong>Transpose</strong>: $(A^\top)_{ij}=A_{ji}$; conjugate transpose $A^*$.</li>
-      <li><strong>Trace</strong>: $\operatorname{tr}(A)=\sum_i A_{ii}$; $\operatorname{tr}(AB)=\operatorname{tr}(BA)$.</li>
-      <li><strong>Determinant</strong>: $\det(A)$; multiplicative, volume scaling; Laplace expansion.</li>
-      <li><strong>Inverse</strong>: $A^{-1}$ s.t. $AA^{-1}=I$; exists $\Leftrightarrow \det(A)\neq 0$.</li>
-      <li><strong>Rank &amp; nullity</strong>: $\operatorname{rank}(A)$, $\mathcal{N}(A)$; rank–nullity theorem.</li>
-      <li><strong>Elementary matrices</strong> implement Gaussian elimination and $PA=LU$.</li>
-    </ul>
-  </div>
+    <nav class="chapter-nav">
+      <span class="disabled">Start of Collection</span>
+      <a class="index-link" href="page1basics.html">Begin with Chapter 1</a>
+      <span class="disabled">Explore Forward</span>
+    </nav>
 
-  <!-- 3. Prime (Core) Matrix Operations -->
-  <div class="section">
-    <h2>3) Core/Prime Matrix Operations</h2>
-    <ul>
-      <li><strong>Projections</strong>: $P^2=P$, $P^\top=P$ (orthogonal). Onto $\operatorname{col}(A)$:
-        \[
-          P_A = A(A^\top A)^{-1}A^\top.
-        \]
-      </li>
-      <li><strong>Permutation matrices</strong>: orthogonal reordering, $P^{-1}=P^\top$.</li>
-      <li><strong>Orthogonal</strong> $Q$: $Q^\top Q=I$; preserves inner products and norms.</li>
-      <li><strong>Positive (semi)definiteness</strong>: $A\succ 0$ if $\mathbf{x}^\top A \mathbf{x}&gt;0$ $\forall \mathbf{x}\neq 0$.</li>
-      <li><strong>Block algebra</strong>: block multiplication, Schur complement:
-        \[
-          S = D - C A^{-1} B.
-        \]
-      </li>
-      <li><strong>Kronecker product</strong> $A\otimes B$; <strong>Hadamard</strong> $A\circ B$; <strong>vec</strong> operator:
-        \[
-          \operatorname{vec}(AXB)=(B^\top\!\otimes A)\operatorname{vec}(X).
-        </]
-      </li>
-    </ul>
-  </div>
-
-  <!-- 4. Eigenvalues & SVD -->
-  <div class="section">
-    <h2>4) Eigenvalues, Eigenvectors &amp; SVD</h2>
-    <ul>
-      <li><strong>Eigen-pair</strong>: $A\mathbf{v}=\lambda \mathbf{v}$; characteristic poly $\det(A-\lambda I)=0$.</li>
-      <li><strong>Diagonalization</strong>: $A=PDP^{-1}$ if eigenvectors form a basis.</li>
-      <li><strong>Spectral theorem</strong> (symmetric $A$): $A=Q\Lambda Q^\top$, $\Lambda=\operatorname{diag}(\lambda_i)$, $Q$ orthogonal.</li>
-      <li><strong>Jordan form</strong> (general $A$): $A=PJP^{-1}$ with Jordan blocks.</li>
-      <li><strong>SVD</strong>: $A=U\Sigma V^\top$, $\Sigma=\operatorname{diag}(\sigma_i)$; best rank-$k$ approx via truncated SVD.</li>
-      <li><strong>Spectral radius</strong> $\rho(A)=\max_i |\lambda_i|$; Gelfand’s formula:
-        \[
-          \rho(A)=\lim_{k\to\infty}\|A^k\|^{1/k}.
-        \]
-      </li>
-    </ul>
-  </div>
-
-  <!-- 5. Vector–Matrix Calculus -->
-  <div class="section">
-    <h2>5) Vector–Matrix Calculus</h2>
-    <ul>
-      <li>Gradients:
-        \[
-          \nabla_{\mathbf{x}}(a^\top \mathbf{x}) = a,\quad
-          \nabla_{\mathbf{x}}(\mathbf{x}^\top A \mathbf{x}) = (A + A^\top)\mathbf{x}.
-        \]
-      </li>
-      <li>Matrix derivatives:
-        \[
-          \frac{\partial}{\partial X}\operatorname{tr}(AX)=A^\top,\quad
-          \frac{\partial}{\partial X}\det(X)=\det(X)\,(X^{-1})^\top.
-        \]
-      </li>
-      <li>Jacobian &amp; Hessian; differential rule:
-        \[
-          d(\mathbf{x}^\top A \mathbf{y}) = \mathbf{y}^\top (dA)\,\mathbf{x} + (A\mathbf{x})^\top d\mathbf{y} + (A^\top\mathbf{y})^\top d\mathbf{x}.
-        \]
-      </li>
-      <li>Matrix calculus identities: $d\,\operatorname{tr}(X^{-1}A)=-\operatorname{tr}(X^{-1}(dX)X^{-1}A)$, etc.</li>
-    </ul>
-  </div>
-
-  <!-- 6. Factorizations -->
-  <div class="section">
-    <h2>6) Factorizations</h2>
-    <ul>
-      <li><strong>LU</strong>: $PA=LU$ (with pivoting).</li>
-      <li><strong>QR</strong>: $A=QR$; Householder vs. Gram–Schmidt.</li>
-      <li><strong>Cholesky</strong> (SPD): $A=LL^\top$.</li>
-      <li><strong>Polar</strong>: $A=UP$ with $U$ orthogonal, $P$ SPD.</li>
-      <li><strong>Eigendecomposition</strong> vs. <strong>SVD</strong>: real symmetric links and differences.</li>
-    </ul>
-  </div>
-
-  <!-- 7. Advanced Matrix Concepts -->
-  <div class="section">
-    <h2>7) Advanced Matrix Concepts</h2>
-    <ul>
-      <li><strong>Moore–Penrose pseudoinverse</strong>: $A^+=V\Sigma^+U^\top$ (from SVD).</li>
-      <li><strong>Matrix norms</strong>: induced $\|A\|_{p}=\max_{\|\mathbf{x}\|_p=1}\|A\mathbf{x}\|_p$, Frobenius $\|A\|_F=\sqrt{\operatorname{tr}(A^\top A)}$.</li>
-      <li><strong>Condition number</strong>: $\kappa(A)=\|A\|\,\|A^{-1}\|$; for 2-norm, $\kappa_2=\sigma_{\max}/\sigma_{\min}$.</li>
-      <li><strong>Matrix exponential</strong>:
-        \[
-          e^{A}=\sum_{k=0}^\infty \frac{A^k}{k!};\quad \frac{d}{dt}e^{tA}=Ae^{tA}=e^{tA}A.
-        \]
-      </li>
-      <li><strong>Discrete Lyapunov/Riccati</strong> equations in control.</li>
-      <li><strong>Kronecker calculus</strong> and vec-tricks for large-scale problems.</li>
-    </ul>
-  </div>
-
-  <!-- 8. Random Matrices & Probability -->
-  <div class="section">
-    <h2>8) Random Matrices &amp; Probability</h2>
-    <ul>
-      <li><strong>Wishart</strong> $W_p(n,\Sigma)$: distribution of sample covariance.</li>
-      <li><strong>Wigner semicircle</strong> (Hermitian i.i.d. entries) and <strong>Marchenko–Pastur</strong> (sample covariance) laws.</li>
-      <li><strong>Free probability</strong>: free convolution approximates spectra of sums/products.</li>
-      <li>Applications: PCA, high-dimensional covariance estimation, spiked models, BBP transition.</li>
-    </ul>
-  </div>
-
-  <!-- 9. Applications in Optimization & ML -->
-  <div class="section">
-    <h2>9) Applications in Optimization &amp; ML</h2>
-    <ul>
-      <li><strong>Least squares</strong>: $\min_{\mathbf{x}}\|A\mathbf{x}-\mathbf{b}\|_2^2 \Rightarrow \mathbf{x}=(A^\top A)^{-1}A^\top\mathbf{b}$ (or $\mathbf{x}=A^+\mathbf{b}$ when rank-deficient).</li>
-      <li><strong>PCA</strong>: eigen-decompose covariance $C=\frac{1}{n}\sum_i \mathbf{x}_i \mathbf{x}_i^\top$.</li>
-      <li><strong>Low-rank approximation</strong>: Eckart–Young–Mirsky theorem via SVD.</li>
-      <li>Convexity via PSD Hessians; semidefinite programs (SDP) and nuclear-norm relaxations.</li>
-      <li>Deep learning: Jacobian/Hessian spectra, NTK, sharp vs. flat minima heuristics.</li>
-    </ul>
-  </div>
-
-  <!-- 10. PhD-Level Topics -->
-  <div class="section">
-    <h2>10) PhD-Level Topics</h2>
-    <ul>
-      <li><strong>Spectral graph theory</strong>: graph Laplacian $L=D-A$; Cheeger inequality linking $\lambda_2(L)$ to expansion.</li>
-      <li><strong>Tensors</strong>: CP/Tucker/TT decompositions; identifiability; complexity vs. matrices.</li>
-      <li><strong>Kronecker sums</strong> in PDE discretization:
-        \[
-          \Delta_h \approx I\otimes T + T\otimes I.
-        \]
-      </li>
-      <li><strong>Perturbation theory</strong>: Davis–Kahan $\sin\Theta$ bounds; Weyl &amp; Hoffman–Wielandt inequalities.</li>
-      <li><strong>Matrix manifolds</strong> (Stiefel, Grassmann): Riemannian gradient, retraction, geodesics.</li>
-      <li><strong>Matrix functions</strong> (holomorphic calculus), logarithm, fractional powers, Cauchy integral formulas.</li>
-      <li><strong>Nonlinear eigenvalue problems</strong> and polynomial/pencil formulations.</li>
-      <li><strong>Operator algebras</strong>: $C^*$-algebras, von Neumann algebras, spectral theorem in infinite-dimensional settings.</li>
-    </ul>
-  </div>
-
+    <footer class="site-footer">
+      <p>&copy; 2025 Private Edition. Crafted for focused, self-paced study.</p>
+    </footer>
+  </main>
 </body>
 </html>
+

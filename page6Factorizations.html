@@ -1,141 +1,143 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Factorizations — Wide Layout</title>
-<script>
-  window.MathJax = {
-    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['\\[','\\]'], ['$$','$$']], processEscapes: true, tags:'ams' },
-    options: { skipHtmlTags:['script','noscript','style','textarea','pre','code'] }
-  };
-</script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<style>
-:root { --bg:#fff; --fg:#0b1221; --muted:#5f6b7a; --card:#f7f9fc; --border:#e6ecf2; --accent:#0e7afe; }
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);background:var(--bg);margin:3rem;line-height:1.55;max-width:1500px;}
-h1{margin-bottom:1rem;} h2{margin-top:2rem;}
-.grid{display:grid;gap:2rem;grid-template-columns:1fr;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem 2.5rem;font-size:1.05rem;}
-.formula{margin:.6rem 0 1rem 0;}
-.ex{background:#fff;border:1px dashed var(--border);border-radius:10px;padding:1rem;margin-top:.75rem;font-family:Consolas,"Courier New",monospace;font-size:1rem;overflow-x:auto;}
-details{margin-top:.6rem;background:#fff;border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;}
-details>summary{cursor:pointer;font-weight:600;color:var(--accent);list-style:none;}
-details>summary::-webkit-details-marker{display:none;}
-.muted{color:var(--muted);}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 6 - Matrix Factorizations</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-<h1>Matrix Factorizations</h1>
-<p class="muted">Core decompositions and how they’re used in solving systems, least squares, optimization, and numerical linear algebra.</p>
+  <main class="book-page">
+    <header class="book-header">
+      <p class="lead">Chapter 6</p>
+      <h1>Matrix Factorizations</h1>
+      <p class="muted">Core decompositions for solving systems, least squares, and numerical linear algebra.</p>
+    </header>
 
-<div class="grid">
+    <nav class="chapter-nav">
+      <a href="page5Calculus.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <a href="page7AdvancedConcepts.html">Next Chapter -&gt;</a>
+    </nav>
 
-<section class="card">
-  <h2>1) LU with Partial Pivoting: $PA=LU$</h2>
-  <p><strong>Background & usage.</strong> LU decomposes a square matrix into lower/upper triangular factors. With a permutation $P$, pivoting ensures numerical stability and existence for all nonsingular $A$. Used for fast solves with multiple right-hand sides.</p>
-  <div class="formula">
-    Given $A\\in\\mathbb{R}^{n\\times n}$ nonsingular, there exists a permutation $P$ and triangular $L$ (unit diagonal) and $U$ such that
-    \[
-      PA = LU.
-    \]
-  </div>
-  <details>
-    <summary>Proof (existence via Gaussian elimination)</summary>
-    Perform Gaussian elimination on $A$. When a zero/unstable pivot occurs, swap rows — this is left multiplication by a permutation matrix $P_k$. The sequence of eliminations can be written as $E_{k}\cdots E_{1} P A = U$, with $E_i$ unit lower–triangular. Taking inverses,
-    \[
-      P A = (E_{k}\cdots E_{1})^{-1} U = L U,
-    \]
-    where $L = E_{1}^{-1}\cdots E_{k}^{-1}$ is unit lower–triangular. Nonsingularity ensures all steps succeed.
-  </details>
-  <div class="ex">
-    Example: 
-    \(A=\begin{bmatrix}2&1\\4&3\end{bmatrix}\). Largest pivot first: swap rows \(\Rightarrow P=\begin{bmatrix}0&1\\1&0\end{bmatrix}\), \(PA=\begin{bmatrix}4&3\\2&1\end{bmatrix}\).<br/>
-    Eliminate: \(L=\begin{bmatrix}1&0\\\tfrac12&1\end{bmatrix}\), \(U=\begin{bmatrix}4&3\\0&-\tfrac12\end{bmatrix}\). Check: \(LU=\begin{bmatrix}4&3\\2&1\end{bmatrix}=PA\).
-  </div>
-</section>
+    <article>
+      <div class="grid">
 
-<section class="card">
-  <h2>2) QR Factorization: $A=QR$</h2>
-  <p><strong>Background & usage.</strong> Expresses columns of $A$ in an orthonormal basis $Q$ with upper triangular $R$. Stable via Householder; central to least squares and the QR eigenvalue algorithm.</p>
-  <div class="formula">
-    For $A\\in\\mathbb{R}^{m\\times n}$ with full column rank, there exist \(Q\\in\\mathbb{R}^{m\\times n}\) with \(Q^\top Q=I\) and upper–triangular \(R\\in\\mathbb{R}^{n\\times n}\) such that
-    \[
-      A=QR.
-    \]
-  </div>
-  <details>
-    <summary>Proof (Gram–Schmidt / Householder sketch)</summary>
-    Apply Gram–Schmidt to columns \(a_i\) to obtain orthonormal \(q_i\) and coefficients \(r_{ij}=q_i^\top a_j\). Stack \(Q=[q_1,\dots,q_n]\), \(R=[r_{ij}]\) upper–triangular; then \(A=\sum_i q_i r_{ij}=QR\). Householder reflections give a numerically stable construction with the same identity.
-  </details>
-  <div class="ex">
-    Example: \(A=\begin{bmatrix}1&1\\0&1\\1&0\end{bmatrix}\). Orthonormalize columns: 
-    \(q_1=\tfrac{1}{\sqrt{2}}(1,0,1)^\top\), \(r_{11}=\sqrt{2}\).  
-    \(a_2' = a_2 - q_1(q_1^\top a_2) = (1,1,0)^\top - \tfrac{1}{\sqrt{2}}(1,0,1)\tfrac{1}{\sqrt{2}} = (1/2,1,-1/2)^\top\).  
-    \(q_2=\frac{a_2'}{\|a_2'\|}\), \(R=\begin{bmatrix}\sqrt{2}&q_1^\top a_2\\0&\|a_2'\|\end{bmatrix}\). Verify \(A\approx QR\).
-  </div>
-</section>
+        <section class="card">
+          <h2>1) LU with Partial Pivoting: $PA = LU$</h2>
+          <p><strong>Background &amp; usage.</strong> LU decomposes a square matrix into lower and upper triangular factors. Pivoting ensures numerical stability and success for all nonsingular $A$.</p>
+          <div class="formula">
+            For $A \in \mathbb{R}^{n \times n}$ nonsingular there exists a permutation $P$ and triangular $L$ (unit diagonal) and $U$ such that
+            \[
+              PA = LU.
+            \]
+          </div>
+          <details>
+            <summary>Proof sketch (Gaussian elimination)</summary>
+            Run elimination on $A$. Whenever a zero or tiny pivot appears, swap rows; each swap is left multiplication by a permutation matrix $P_k$. After $k$ steps, $E_k \cdots E_1 P A = U$ with $E_i$ unit lower triangular. Taking inverses, $P A = (E_k \cdots E_1)^{-1} U = L U$ where $L = E_1^{-1} \cdots E_k^{-1}$.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}2 & 1\\ 4 & 3\end{bmatrix}$. Swap rows: $P = \begin{bmatrix}0 & 1\\ 1 & 0\end{bmatrix}$, $PA = \begin{bmatrix}4 & 3\\ 2 & 1\end{bmatrix}$. Eliminate with $L = \begin{bmatrix}1 & 0\\ \tfrac{1}{2} & 1\end{bmatrix}$, $U = \begin{bmatrix}4 & 3\\ 0 & -\tfrac{1}{2}\end{bmatrix}$, so $LU = PA$.
+          </div>
+        </section>
 
-<section class="card">
-  <h2>3) Cholesky: $A=LL^\top$ for $A\\succ 0$</h2>
-  <p><strong>Background & usage.</strong> For symmetric positive definite matrices, Cholesky halves the work of LU and preserves symmetry. Ubiquitous in Gaussian processes, least squares, and SPD linear systems.</p>
-  <div class="formula">
-    If \(A=A^\top\\succ0\), then there exists a unique lower–triangular \(L\) with positive diagonal such that
-    \[
-      A=LL^\top.
-    \]
-  </div>
-  <details>
-    <summary>Proof (induction on dimension)</summary>
-    Partition \(A=\begin{bmatrix}a&b^\top\\ b&C\end{bmatrix}\) with \(a>0\). Set \(\ell_{11}=\sqrt{a}\), \(\ell_{21}=b/\ell_{11}\). Define Schur complement \(S=C-bb^\top/a\), which is SPD. By induction \(S=\tilde L \tilde L^\top\). Then
-    \(L=\begin{bmatrix}\ell_{11}&0\\ \ell_{21}&\tilde L\end{bmatrix}\) satisfies \(LL^\top=A\). Uniqueness follows from positivity of diagonals.
-  </details>
-  <div class="ex">
-    Example: \(A=\begin{bmatrix}4&2\\2&3\end{bmatrix}\).  
-    \(\ell_{11}=2\), \(\ell_{21}=1\), \(S=3-1=2\Rightarrow \ell_{22}=\sqrt{2}\).  
-    \(L=\begin{bmatrix}2&0\\1&\sqrt{2}\end{bmatrix}\). Check \(LL^\top=\begin{bmatrix}4&2\\2&3\end{bmatrix}\).
-  </div>
-</section>
+        <section class="card">
+          <h2>2) QR Factorization: $A = QR$</h2>
+          <p><strong>Background &amp; usage.</strong> Expresses columns of $A$ in an orthonormal basis $Q$ with upper triangular $R$. Stable via Householder reflections; central to least squares.</p>
+          <div class="formula">
+            For $A \in \mathbb{R}^{m \times n}$ with full column rank, there exist $Q \in \mathbb{R}^{m \times n}$ with $Q^\top Q = I$ and upper triangular $R \in \mathbb{R}^{n \times n}$ so that
+            \[
+              A = QR.
+            \]
+          </div>
+          <details>
+            <summary>Proof sketch (Gram&ndash;Schmidt)</summary>
+            Apply Gram&ndash;Schmidt to columns $a_i$ to obtain orthonormal $q_i$ and coefficients $r_{ij} = q_i^\top a_j$. Stacking $Q = [q_1, \dots, q_n]$ and the upper triangular $R = [r_{ij}]$ gives $A = QR$. Householder reflections yield the same identity with better stability.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}1 & 1\\ 0 & 1\\ 1 & 0\end{bmatrix}$. Normalize $a_1$ to get $q_1 = \tfrac{1}{\sqrt{2}}(1, 0, 1)^\top$ and $r_{11} = \sqrt{2}$. Orthogonalize $a_2$ against $q_1$, normalize to $q_2$, and assemble $R = \begin{bmatrix} \sqrt{2} & q_1^\top a_2\\ 0 & \|a_2'\| \end{bmatrix}$ so that $A = QR$.
+          </div>
+        </section>
 
-<section class="card">
-  <h2>4) Singular Value Decomposition: $A=U\Sigma V^\top$</h2>
-  <p><strong>Background & usage.</strong> SVD diagonalizes any matrix by orthogonal/unitary factors; reveals rank, condition number, and optimal low-rank approximations (Eckart–Young).</p>
-  <div class="formula">
-    For \(A\\in\\mathbb{R}^{m\\times n}\), there exist orthogonal \(U,V\) and diagonal \(\Sigma\\ge0\) such that
-    \[
-      A=U\Sigma V^\top,\qquad \sigma_i^2\ \text{are eigenvalues of }A^\top A.
-    \]
-  </div>
-  <details>
-    <summary>Proof (via $A^\top A$)</summary>
-    \(A^\top A\) is symmetric PSD. Choose orthonormal eigenvectors \(v_i\) with eigenvalues \(\sigma_i^2\ge0\). Set \(u_i=Av_i/\sigma_i\) (define any orthonormal basis for nullspace if \(\sigma_i=0\)). Then \(A=\sum_i \sigma_i u_i v_i^\top=U\Sigma V^\top\).
-  </details>
-  <div class="ex">
-    Example: \(A=\begin{bmatrix}3&0\\0&1\end{bmatrix}\).  
-    \(A^\top A=\operatorname{diag}(9,1)\Rightarrow \Sigma=\operatorname{diag}(3,1)\), \(U=V=I\). So \(A=U\Sigma V^\top\) trivially.
-  </div>
-</section>
+        <section class="card">
+          <h2>3) Cholesky Factorization: $A = LL^\top$</h2>
+          <p><strong>Background &amp; usage.</strong> For symmetric positive definite matrices, Cholesky halves the work of LU and preserves symmetry. Used in Gaussian processes, least squares, and SPD systems.</p>
+          <div class="formula">
+            If $A = A^\top \succ 0$, there exists a unique lower triangular $L$ with positive diagonal such that
+            \[
+              A = LL^\top.
+            \]
+          </div>
+          <details>
+            <summary>Proof sketch (induction)</summary>
+            Partition $A = \begin{bmatrix} a & b^\top\\ b & C \end{bmatrix}$ with $a &gt; 0$. Set $\ell_{11} = \sqrt{a}$ and $\ell_{21} = b / \ell_{11}$. The Schur complement $S = C - bb^\top / a$ is SPD, so by induction $S = \tilde L \tilde L^\top$. Then $L = \begin{bmatrix} \ell_{11} & 0\\ \ell_{21} & \tilde L \end{bmatrix}$ satisfies $LL^\top = A$.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}4 & 2\\ 2 & 3\end{bmatrix}$. Compute $\ell_{11} = 2$, $\ell_{21} = 1$, $S = 3 - 1 = 2$, so $\ell_{22} = \sqrt{2}$ and $L = \begin{bmatrix}2 & 0\\ 1 & \sqrt{2}\end{bmatrix}$ with $LL^\top = A$.
+          </div>
+        </section>
 
-<section class="card">
-  <h2>5) Polar Decomposition: $A=UP$ with $U$ orthogonal, $P\\succeq0$</h2>
-  <p><strong>Background & usage.</strong> Splits a linear map into a rotation/reflection \(U\) and a stretch \(P\). Used in mechanics, optimization on manifolds, and Procrustes alignment.</p>
-  <div class="formula">
-    For \(A\\in\\mathbb{R}^{m\\times n}\) (full column rank if \(m\\ge n\)), define \(P=(A^\top A)^{1/2}\\succeq0\) and \(U=A P^{-1}\). Then
-    \[
-      A=UP,\qquad U^\top U = I.
-    \]
-  </div>
-  <details>
-    <summary>Proof (from SVD)</summary>
-    Let \(A=U_0\Sigma V^\top\). Then \(A^\top A=V\Sigma^2 V^\top\Rightarrow P=V\Sigma V^\top\). Hence \(U=A P^{-1}=U_0\Sigma V^\top (V\Sigma V^\top)^{-1}=U_0 V^\top\) with \(U^\top U=I\). Therefore \(A=UP\).
-  </details>
-  <div class="ex">
-    Example: \(A=\begin{bmatrix}0&1\\1&0\end{bmatrix}\).  
-    \(A^\top A=I\Rightarrow P=I\), \(U=A\). Thus \(A=UP\) with \(U\) orthogonal.
-  </div>
-</section>
+        <section class="card">
+          <h2>4) Singular Value Decomposition: $A = U \Sigma V^\top$</h2>
+          <p><strong>Background &amp; usage.</strong> SVD diagonalizes any matrix by orthogonal factors. It reveals rank, condition number, and yields optimal low rank approximations.</p>
+          <div class="formula">
+            For $A \in \mathbb{R}^{m \times n}$ there exist orthogonal $U, V$ and diagonal $\Sigma \ge 0$ such that
+            \[
+              A = U \Sigma V^\top, \qquad \sigma_i^2 \text{ are eigenvalues of } A^\top A.
+            \]
+          </div>
+          <details>
+            <summary>Proof sketch (via $A^\top A$)</summary>
+            The matrix $A^\top A$ is symmetric PSD. Choose orthonormal eigenvectors $v_i$ with eigenvalues $\sigma_i^2 \ge 0$. Set $u_i = A v_i / \sigma_i$ for $\sigma_i &gt; 0$ (extend to a basis for the nullspace if needed). Then $A = \sum_i \sigma_i u_i v_i^\top = U \Sigma V^\top$.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}3 & 0\\ 0 & 1\end{bmatrix}$. Then $A^\top A = \operatorname{diag}(9, 1)$, so $\Sigma = \operatorname{diag}(3, 1)$ and $U = V = I$.
+          </div>
+        </section>
 
-</div>
+        <section class="card">
+          <h2>5) Polar Decomposition: $A = U P$</h2>
+          <p><strong>Background &amp; usage.</strong> Splits a linear map into an orthogonal factor $U$ and a symmetric stretch $P$, useful in mechanics and manifold optimization.</p>
+          <div class="formula">
+            For $A \in \mathbb{R}^{m \times n}$ with full column rank (if $m \ge n$), define $P = (A^\top A)^{1/2} \succeq 0$ and $U = A P^{-1}$. Then
+            \[
+              A = U P, \qquad U^\top U = I.
+            \]
+          </div>
+          <details>
+            <summary>Proof sketch (from the SVD)</summary>
+            Let $A = U_0 \Sigma V^\top$. Then $A^\top A = V \Sigma^2 V^\top$, so $P = V \Sigma V^\top$. Consequently $U = A P^{-1} = U_0 V^\top$ with $U^\top U = I$, and $A = U P$.
+          </details>
+          <div class="ex">
+            Example: $A = \begin{bmatrix}0 & 1\\ 1 & 0\end{bmatrix}$. Since $A^\top A = I$, $P = I$ and $U = A$, giving $A = U P$ with $U$ orthogonal.
+          </div>
+        </section>
+
+      </div>
+    </article>
+
+    <nav class="chapter-nav bottom">
+      <a href="page5Calculus.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <a href="page7AdvancedConcepts.html">Next Chapter -&gt;</a>
+    </nav>
+
+    <footer class="site-footer">
+      <p>Digital Notes Series - Chapter 6</p>
+    </footer>
+  </main>
 </body>
 </html>
 

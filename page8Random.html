@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 8 - Random Matrices</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <main class="book-page">
+    <header class="book-header">
+      <p class="lead">Chapter 8</p>
+      <h1>Random Matrices</h1>
+      <p class="muted">Wishart covariance models, Marchenko&ndash;Pastur and Wigner laws, plus concentration heuristics.</p>
+    </header>
+
+    <nav class="chapter-nav">
+      <a href="page7AdvancedConcepts.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <a href="page9ML.html">Next Chapter -&gt;</a>
+    </nav>
+
+    <article>
+      <div class="grid">
+
+        <section class="card">
+          <h2>1) Wishart Distribution and Mean</h2>
+          <p><strong>Background &amp; usage.</strong> If $x_i \sim \mathcal{N}(0, \Sigma)$ independently, the sample covariance $S = \sum x_i x_i^\top$ is Wishart. Used in multivariate statistics and covariance estimation.</p>
+          <div class="formula">
+            If $x_i \sim \mathcal{N}(0, \Sigma)$ and $S = \sum_{i=1}^n x_i x_i^\top$, then $S \sim W_p(n, \Sigma)$ with expectation
+            \[
+              \mathbb{E}[S] = n \Sigma.
+            \]
+          </div>
+          <details>
+            <summary>Proof</summary>
+            Since $\mathbb{E}[x_i x_i^\top] = \Sigma$ by the definition of covariance, linearity gives $\mathbb{E}[S] = \sum \mathbb{E}[x_i x_i^\top] = n \Sigma$.
+          </details>
+          <div class="ex">
+            Example: With $\Sigma = \begin{bmatrix}2 & 0\\ 0 & 1\end{bmatrix}$ and $n = 3$, the mean is $\operatorname{diag}(6, 3)$.
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>2) Marchenko&ndash;Pastur Law (Statement)</h2>
+          <p><strong>Background &amp; usage.</strong> Describes limiting eigenvalue distribution of sample covariance when $p, n \to \infty$ with $p/n \to \gamma$; crucial in high-dimensional PCA.</p>
+          <div class="formula">
+            For $X \in \mathbb{R}^{p \times n}$ with independent entries of variance $1$, eigenvalues of $\tfrac{1}{n} X X^\top$ converge in distribution to Marchenko&ndash;Pastur with support
+            \[
+              \big[(1 - \sqrt{\gamma})^2,\ (1 + \sqrt{\gamma})^2\big], \qquad \gamma = \lim_{n \to \infty} \frac{p}{n}.
+            \]
+          </div>
+          <details>
+            <summary>Proof sketch</summary>
+            Use the Stieltjes transform and moment method: match moments of $\tfrac{1}{n} X X^\top$ with Catalan numbers scaled by $\gamma$, then invert analytically to obtain the density and support.
+          </details>
+          <div class="ex">
+            Example: If $\gamma = 1/4$, the support is $[(1 - \tfrac{1}{2})^2, (1 + \tfrac{1}{2})^2] = [0.25, 2.25]$. Eigenvalues of $\tfrac{1}{n} X X^\top$ concentrate in this interval for large $n$.
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>3) Wigner Semicircle Law (Statement)</h2>
+          <p><strong>Background &amp; usage.</strong> Governs eigenvalues of large symmetric matrices with centered independent entries; appears in physics and combinatorics.</p>
+          <div class="formula">
+            For symmetric $W_n$ with independent entries (mean $0$, variance $1/n$), the empirical eigenvalue distribution converges to
+            \[
+              \rho(x) = \frac{1}{2 \pi} \sqrt{4 - x^2} \quad \text{on } [-2, 2].
+            \]
+          </div>
+          <details>
+            <summary>Proof sketch</summary>
+            The moment method counts non-crossing pairings: $\mathbb{E}\big[\tfrac{1}{n} \operatorname{tr}(W_n^k)\big]$ converges to Catalan numbers, whose generating function yields the semicircle density.
+          </details>
+          <div class="ex">
+            Example: For $W = \tfrac{1}{\sqrt{3}} \begin{bmatrix}0 & 1 & -1\\ 1 & 0 & 1\\ -1 & 1 & 0\end{bmatrix}$, eigenvalues lie within $[-2, 2]$ and approximate the semicircle shape as $n$ grows.
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>4) Concentration of Sample Covariance (Heuristic)</h2>
+          <p><strong>Background &amp; usage.</strong> Bounds deviation of empirical covariance from the true covariance in operator norm; informs sample complexity for PCA.</p>
+          <div class="formula">
+            For sub-Gaussian $x_i \in \mathbb{R}^p$ with covariance $\Sigma$, with high probability
+            \[
+              \left\| \frac{1}{n} \sum_{i=1}^n x_i x_i^\top - \Sigma \right\|_2 \lesssim \|\Sigma\|_2 \left( \sqrt{\frac{p}{n}} + \frac{p}{n} \right).
+            \]
+          </div>
+          <details>
+            <summary>Proof sketch</summary>
+            Apply matrix Bernstein (or Vershynin's sub-Gaussian tail bounds) to centered matrices $x_i x_i^\top - \Sigma$ and take a union bound over an $\varepsilon$-net on the unit sphere.
+          </details>
+          <div class="ex">
+            Example: If $p = 50$, $n = 200$, and $\|\Sigma\|_2 = 3$, the bound gives approximately $3 (\sqrt{0.25} + 0.25) = 2.25$.
+          </div>
+        </section>
+
+      </div>
+    </article>
+
+    <nav class="chapter-nav bottom">
+      <a href="page7AdvancedConcepts.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <a href="page9ML.html">Next Chapter -&gt;</a>
+    </nav>
+
+    <footer class="site-footer">
+      <p>Digital Notes Series - Chapter 8</p>
+    </footer>
+  </main>
+</body>
+</html>
+

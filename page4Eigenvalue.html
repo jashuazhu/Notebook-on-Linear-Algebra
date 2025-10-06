@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Eigenvalues & Eigenvectors — Wide Layout</title>
-
-  <!-- MathJax v3 configuration -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 4 - Spectral Insights</title>
+  <link rel="stylesheet" href="styles.css" />
   <script>
     window.MathJax = {
       tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['\\[','\\]'], ['$$','$$']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
         processEscapes: true,
         tags: 'ams'
       },
@@ -18,335 +17,307 @@
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-  <style>
-    :root {
-      --bg: #ffffff;
-      --fg: #0b1221;
-      --muted: #5f6b7a;
-      --card: #f7f9fc;
-      --border: #e6ecf2;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      color: var(--fg);
-      background: var(--bg);
-      margin: 3rem;
-      line-height: 1.55;
-      max-width: 1500px; /* wide content area */
-    }
-
-    h1 { margin-bottom: 1rem; }
-    h2 { margin-top: 2rem; }
-
-    .grid {
-      display: grid;
-      gap: 2rem;
-      grid-template-columns: 1fr; /* full width per section */
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem 2.5rem;
-      font-size: 1.05rem;
-    }
-
-    .formula { margin: 0.6rem 0 1rem 0; font-size: 1.05rem; }
-    .muted { color: var(--muted); }
-
-    .ex {
-      background: #fff;
-      border: 1px dashed var(--border);
-      border-radius: 10px;
-      padding: 1rem;
-      margin-top: 0.75rem;
-      font-family: Consolas, "Courier New", monospace;
-      font-size: 1rem;
-      overflow-x: auto;
-    }
-
-    ul.tight { margin: 0.5rem 0 0.8rem 1.5rem; }
-  </style>
 </head>
 <body>
-  <h1>Eigenvalues &amp; Eigenvectors</h1>
-  <p class="muted">Definitions, diagonalization, spectral theorem, spectral radius, Jordan form, Schur decomposition, SVD relations, Gershgorin, power method.</p>
+  <main class="book-page">
+    <header class="book-header">
+      <p class="lead">Chapter 4</p>
+      <h1>Spectral Insights</h1>
+      <p class="muted">Eigenvalues, eigenvectors, and singular value explorations.</p>
+    </header>
 
-  <div class="grid">
+        <nav class="chapter-nav">
+      <a href="page3 Matrix.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <a href="page5Calculus.html">Next Chapter -&gt;</a>
+    </nav>
 
-    <!-- 1. Definition & Characteristic Polynomial -->
-    <section class="card">
-      <h2>1) Definition &amp; Characteristic Polynomial</h2>
-      <div class="formula">
-        An eigenpair $(\lambda,\mathbf{v}\neq \mathbf{0})$ of $A\in\mathbb{R}^{n\times n}$ satisfies
-        \[
-          A\mathbf{v}=\lambda \mathbf{v}.
-        \]
-        Eigenvalues are roots of the characteristic polynomial:
-        \[
-          p_A(\lambda)=\det(\lambda I - A)=0.
-        \]
-      </div>
-      <div class="ex">
-        For
-        \(
-          A=\begin{bmatrix}4&1\\0&2\end{bmatrix}
-        \),
-        \(
-          p_A(\lambda)=\det\!\begin{bmatrix}\lambda-4&-1\\0&\lambda-2\end{bmatrix}
-          =(\lambda-4)(\lambda-2).
-        \)
-        Eigenvalues: $\lambda_1=4$, $\lambda_2=2$.
-      </div>
-    </section>
+    <article>
+      <div class="grid">
 
-    <!-- 2. Diagonalization -->
-    <section class="card">
-      <h2>2) Diagonalization</h2>
-      <div class="formula">
-        $A$ is diagonalizable if there exists an invertible $P$ s.t.
-        \[
-          A = P D P^{-1},\qquad D=\operatorname{diag}(\lambda_1,\dots,\lambda_n),
-        \]
-        where columns of $P$ are (linearly independent) eigenvectors. Sufficient condition: $n$ distinct eigenvalues.
-      </div>
-      <div class="ex">
-        For
-        \(
-          A=\begin{bmatrix}4&1\\0&2\end{bmatrix}
-        \):
-        \[
-          \lambda_1=4,\; \mathbf{v}_1=\begin{bmatrix}1\\0\end{bmatrix};\qquad
-          \lambda_2=2,\; \mathbf{v}_2=\begin{bmatrix}-\tfrac12\\1\end{bmatrix}.
-        \]
-        Then
-        \(
-          P=\begin{bmatrix}1&-\tfrac12\\0&1\end{bmatrix},\;
-          D=\begin{bmatrix}4&0\\0&2\end{bmatrix},
-        \)
-        and $A=PDP^{-1}$.
-      </div>
-    </section>
+          <!-- 1. Definition & Characteristic Polynomial -->
+          <section class="card">
+            <h2>1) Definition &amp; Characteristic Polynomial</h2>
+            <div class="formula">
+              An eigenpair $(\lambda,\mathbf{v}\neq \mathbf{0})$ of $A\in\mathbb{R}^{n\times n}$ satisfies
+              \[
+                A\mathbf{v}=\lambda \mathbf{v}.
+              \]
+              Eigenvalues are roots of the characteristic polynomial:
+              \[
+                p_A(\lambda)=\det(\lambda I - A)=0.
+              \]
+            </div>
+            <div class="ex">
+              For
+              \(
+                A=\begin{bmatrix}4&1\\0&2\end{bmatrix}
+              \),
+              \(
+                p_A(\lambda)=\det\!\begin{bmatrix}\lambda-4&-1\\0&\lambda-2\end{bmatrix}
+                =(\lambda-4)(\lambda-2).
+              \)
+              Eigenvalues: $\lambda_1=4$, $\lambda_2=2$.
+            </div>
+          </section>
 
-    <!-- 3. Spectral Theorem (Real Symmetric) -->
-    <section class="card">
-      <h2>3) Spectral Theorem (Real Symmetric)</h2>
-      <div class="formula">
-        If $A=A^\top$, then there exists an orthogonal $Q$ and real diagonal $\Lambda$ with
-        \[
-          A=Q\Lambda Q^\top,\quad Q^\top Q=I.
-        \]
-        Eigenvectors can be chosen orthonormal; eigenvalues are real.
-      </div>
-      <div class="ex">
-        Let
-        \(
-          S=\begin{bmatrix}5&-2\\-2&5\end{bmatrix}.
-        \)
-        Eigenvalues: solve $\det(S-\lambda I)=(5-\lambda)^2-4=0$
-        ⇒ $\lambda\in\{3,7\}$. Orthonormal eigenvectors:
-        \(
-          \tfrac{1}{\sqrt2}(1,1)^\top
-        \)
-        for $\lambda=7$ and
-        \(
-          \tfrac{1}{\sqrt2}(1,-1)^\top
-        \)
-        for $\lambda=3$. Hence
-        \[
-          S = Q\Lambda Q^\top,\quad
-          Q=\frac{1}{\sqrt2}\begin{bmatrix}1&1\\1&-1\end{bmatrix},\;
-          \Lambda=\begin{bmatrix}7&0\\0&3\end{bmatrix}.
-        \]
-      </div>
-    </section>
+          <!-- 2. Diagonalization -->
+          <section class="card">
+            <h2>2) Diagonalization</h2>
+            <div class="formula">
+              $A$ is diagonalizable if there exists an invertible $P$ s.t.
+              \[
+                A = P D P^{-1},\qquad D=\operatorname{diag}(\lambda_1,\dots,\lambda_n),
+              \]
+              where columns of $P$ are (linearly independent) eigenvectors. Sufficient condition: $n$ distinct eigenvalues.
+            </div>
+            <div class="ex">
+              For
+              \(
+                A=\begin{bmatrix}4&1\\0&2\end{bmatrix}
+              \):
+              \[
+                \lambda_1=4,\; \mathbf{v}_1=\begin{bmatrix}1\\0\end{bmatrix};\qquad
+                \lambda_2=2,\; \mathbf{v}_2=\begin{bmatrix}-\tfrac12\\1\end{bmatrix}.
+              \]
+              Then
+              \(
+                P=\begin{bmatrix}1&-\tfrac12\\0&1\end{bmatrix},\;
+                D=\begin{bmatrix}4&0\\0&2\end{bmatrix},
+              \)
+              and $A=PDP^{-1}$.
+            </div>
+          </section>
 
-    <!-- 4. Spectral Radius & Gelfand's Formula -->
-    <section class="card">
-      <h2>4) Spectral Radius &amp; Gelfand’s Formula</h2>
-      <div class="formula">
-        The spectral radius is
-        \[
-          \rho(A)=\max_i |\lambda_i(A)|.
-        \]
-        Gelfand’s formula (for any operator norm $\|\cdot\|$):
-        \[
-          \rho(A)=\lim_{k\to\infty}\|A^k\|^{1/k}.
-        \]
-      </div>
-      <div class="ex">
-        For $A=\begin{bmatrix}4&1\\0&2\end{bmatrix}$, eigenvalues are $4$ and $2$, so $\rho(A)=4$.
-      </div>
-    </section>
+          <!-- 3. Spectral Theorem (Real Symmetric) -->
+          <section class="card">
+            <h2>3) Spectral Theorem (Real Symmetric)</h2>
+            <div class="formula">
+              If $A=A^\top$, then there exists an orthogonal $Q$ and real diagonal $\Lambda$ with
+              \[
+                A=Q\Lambda Q^\top,\quad Q^\top Q=I.
+              \]
+              Eigenvectors can be chosen orthonormal; eigenvalues are real.
+            </div>
+            <div class="ex">
+              Let
+              \(
+                S=\begin{bmatrix}5&-2\\-2&5\end{bmatrix}.
+              \)
+              Eigenvalues: solve $\det(S-\lambda I)=(5-\lambda)^2-4=0$
+              ⇒ $\lambda\in\{3,7\}$. Orthonormal eigenvectors:
+              \(
+                \tfrac{1}{\sqrt2}(1,1)^\top
+              \)
+              for $\lambda=7$ and
+              \(
+                \tfrac{1}{\sqrt2}(1,-1)^\top
+              \)
+              for $\lambda=3$. Hence
+              \[
+                S = Q\Lambda Q^\top,\quad
+                Q=\frac{1}{\sqrt2}\begin{bmatrix}1&1\\1&-1\end{bmatrix},\;
+                \Lambda=\begin{bmatrix}7&0\\0&3\end{bmatrix}.
+              \]
+            </div>
+          </section>
 
-    <!-- 5. Jordan Normal Form (Defective Case) -->
-    <section class="card">
-      <h2>5) Jordan Normal Form</h2>
-      <div class="formula">
-        Over $\mathbb{C}$, every $A$ is similar to a Jordan matrix $J$:
-        \[
-          A=PJP^{-1},\quad
-          J=\operatorname{diag}(J_{k_1}(\lambda_1),\dots,J_{k_r}(\lambda_r)),
-        \]
-        where a Jordan block is
-        \(
-          J_k(\lambda)=
-          \begin{bmatrix}
-            \lambda&1&&\\&\lambda&\ddots&\\&&\ddots&1\\&&&\lambda
-          \end{bmatrix}.
-        \)
-        $A$ is diagonalizable iff all Jordan blocks are size $1$.
-      </div>
-      <div class="ex">
-        \[
-          B=\begin{bmatrix}2&1\\0&2\end{bmatrix}
-          \quad\text{has only one eigenvector}\quad
-          \mathbf{v}=\begin{bmatrix}1\\0\end{bmatrix}.
-        \]
-        Its Jordan form is $J=\begin{bmatrix}2&1\\0&2\end{bmatrix}$ (already a single Jordan block).
-      </div>
-    </section>
+          <!-- 4. Spectral Radius & Gelfand's Formula -->
+          <section class="card">
+            <h2>4) Spectral Radius &amp; Gelfand’s Formula</h2>
+            <div class="formula">
+              The spectral radius is
+              \[
+                \rho(A)=\max_i |\lambda_i(A)|.
+              \]
+              Gelfand’s formula (for any operator norm $\|\cdot\|$):
+              \[
+                \rho(A)=\lim_{k\to\infty}\|A^k\|^{1/k}.
+              \]
+            </div>
+            <div class="ex">
+              For $A=\begin{bmatrix}4&1\\0&2\end{bmatrix}$, eigenvalues are $4$ and $2$, so $\rho(A)=4$.
+            </div>
+          </section>
 
-    <!-- 6. Schur Decomposition (Complex) -->
-    <section class="card">
-      <h2>6) Schur Decomposition</h2>
-      <div class="formula">
-        Over $\mathbb{C}$, any $A$ admits a unitary Schur decomposition
-        \[
-          A = Q T Q^*,\quad Q^*Q=I,
-        \]
-        where $T$ is upper triangular with eigenvalues of $A$ on its diagonal.
-      </div>
-      <div class="ex">
-        Even when $A$ is not normal/diagonalizable, Schur form exists and is numerically stable; QR algorithm computes (real/complex) Schur form in practice.
-      </div>
-    </section>
+          <!-- 5. Jordan Normal Form (Defective Case) -->
+          <section class="card">
+            <h2>5) Jordan Normal Form</h2>
+            <div class="formula">
+              Over $\mathbb{C}$, every $A$ is similar to a Jordan matrix $J$:
+              \[
+                A=PJP^{-1},\quad
+                J=\operatorname{diag}(J_{k_1}(\lambda_1),\dots,J_{k_r}(\lambda_r)),
+              \]
+              where a Jordan block is
+              \(
+                J_k(\lambda)=
+                \begin{bmatrix}
+                  \lambda&1&&\\&\lambda&\ddots&\\&&\ddots&1\\&&&\lambda
+                \end{bmatrix}.
+              \)
+              $A$ is diagonalizable iff all Jordan blocks are size $1$.
+            </div>
+            <div class="ex">
+              \[
+                B=\begin{bmatrix}2&1\\0&2\end{bmatrix}
+                \quad\text{has only one eigenvector}\quad
+                \mathbf{v}=\begin{bmatrix}1\\0\end{bmatrix}.
+              \]
+              Its Jordan form is $J=\begin{bmatrix}2&1\\0&2\end{bmatrix}$ (already a single Jordan block).
+            </div>
+          </section>
 
-    <!-- 7. SVD vs Eigen-Decomposition -->
-    <section class="card">
-      <h2>7) SVD vs. Eigen-Decomposition</h2>
-      <div class="formula">
-        For $A\in\mathbb{R}^{m\times n}$, the SVD is
-        \[
-          A=U\Sigma V^\top,\quad \Sigma=\operatorname{diag}(\sigma_1\ge\cdots\ge\sigma_r&gt;0).
-        \]
-        Singular values satisfy
-        \[
-          \sigma_i^2 \ \text{are eigenvalues of } A^\top A \ (\text{and } AA^\top).
-        \]
-      </div>
-      <div class="ex">
-        Take
-        \(
-          A=\begin{bmatrix}3&1\\0&1\end{bmatrix}.
-        \)
-        Then
-        \(
-          A^\top A=\begin{bmatrix}9&3\\3&2\end{bmatrix}.
-        \)
-        Eigenvalues of $A^\top A$ are roots of
-        \(
-          \lambda^2-11\lambda+9=0
-        \)
-        ⇒ $\lambda_{1,2}=\frac{11\pm\sqrt{121-36}}{2}=\frac{11\pm\sqrt{85}}{2}$, so
-        \(
-          \sigma_{1,2}=\sqrt{\lambda_{1,2}}.
-        \)
-      </div>
-    </section>
+          <!-- 6. Schur Decomposition (Complex) -->
+          <section class="card">
+            <h2>6) Schur Decomposition</h2>
+            <div class="formula">
+              Over $\mathbb{C}$, any $A$ admits a unitary Schur decomposition
+              \[
+                A = Q T Q^*,\quad Q^*Q=I,
+              \]
+              where $T$ is upper triangular with eigenvalues of $A$ on its diagonal.
+            </div>
+            <div class="ex">
+              Even when $A$ is not normal/diagonalizable, Schur form exists and is numerically stable; QR algorithm computes (real/complex) Schur form in practice.
+            </div>
+          </section>
 
-    <!-- 8. Gershgorin Disks -->
-    <section class="card">
-      <h2>8) Gershgorin Circle Theorem</h2>
-      <div class="formula">
-        Every eigenvalue of $A=[a_{ij}]$ lies in at least one disk
-        \[
-          D(a_{ii}, R_i),\quad R_i=\sum_{j\ne i}|a_{ij}|.
-        \]
-      </div>
-      <div class="ex">
-        For
-        \(
-          A=\begin{bmatrix}
-            4 & -1 & 0\\
-            2 & 3 & 1\\
-            0 & -2 & 2
-          \end{bmatrix}
-        \),
-        disks are
-        \(
-          D(4,1),\ D(3,|2|+|1|=3),\ D(2,2).
-        \)
-        All eigenvalues lie in the union of these disks in $\mathbb{C}$.
-      </div>
-    </section>
+          <!-- 7. SVD vs Eigen-Decomposition -->
+          <section class="card">
+            <h2>7) SVD vs. Eigen-Decomposition</h2>
+            <div class="formula">
+              For $A\in\mathbb{R}^{m\times n}$, the SVD is
+              \[
+                A=U\Sigma V^\top,\quad \Sigma=\operatorname{diag}(\sigma_1\ge\cdots\ge\sigma_r&gt;0).
+              \]
+              Singular values satisfy
+              \[
+                \sigma_i^2 \ \text{are eigenvalues of } A^\top A \ (\text{and } AA^\top).
+              \]
+            </div>
+            <div class="ex">
+              Take
+              \(
+                A=\begin{bmatrix}3&1\\0&1\end{bmatrix}.
+              \)
+              Then
+              \(
+                A^\top A=\begin{bmatrix}9&3\\3&2\end{bmatrix}.
+              \)
+              Eigenvalues of $A^\top A$ are roots of
+              \(
+                \lambda^2-11\lambda+9=0
+              \)
+              ⇒ $\lambda_{1,2}=\frac{11\pm\sqrt{121-36}}{2}=\frac{11\pm\sqrt{85}}{2}$, so
+              \(
+                \sigma_{1,2}=\sqrt{\lambda_{1,2}}.
+              \)
+            </div>
+          </section>
 
-    <!-- 9. Rayleigh Quotient & Power Method -->
-    <section class="card">
-      <h2>9) Rayleigh Quotient &amp; Power Method</h2>
-      <div class="formula">
-        Rayleigh quotient for nonzero $x$:
-        \[
-          R_A(x)=\frac{x^\top A x}{x^\top x}.
-        \]
-        For symmetric $A$, $R_A(x)\in[\lambda_{\min},\lambda_{\max}]$ and attains extrema at eigenvectors.  
-        Power method (dominant eigenpair): iterate $x_{k+1}=\frac{Ax_k}{\|Ax_k\|}$ to obtain the eigenvector of $\rho(A)$ (if unique in magnitude).
-      </div>
-      <div class="ex">
-        For
-        \(
-          S=\begin{bmatrix}5&-2\\-2&5\end{bmatrix}
-        \),
-        starting $x_0=(1,0)^\top$:
-        \(
-          x_1\propto Sx_0=(5,-2)^\top,\;
-          x_2\propto Sx_1,\ \dots
-        \)
-        converges to eigenvector of $\lambda_{\max}=7$, i.e., $\tfrac{1}{\sqrt2}(1,1)^\top$.
-      </div>
-    </section>
+          <!-- 8. Gershgorin Disks -->
+          <section class="card">
+            <h2>8) Gershgorin Circle Theorem</h2>
+            <div class="formula">
+              Every eigenvalue of $A=[a_{ij}]$ lies in at least one disk
+              \[
+                D(a_{ii}, R_i),\quad R_i=\sum_{j\ne i}|a_{ij}|.
+              \]
+            </div>
+            <div class="ex">
+              For
+              \(
+                A=\begin{bmatrix}
+                  4 & -1 & 0\\
+                  2 & 3 & 1\\
+                  0 & -2 & 2
+                \end{bmatrix}
+              \),
+              disks are
+              \(
+                D(4,1),\ D(3,|2|+|1|=3),\ D(2,2).
+              \)
+              All eigenvalues lie in the union of these disks in $\mathbb{C}$.
+            </div>
+          </section>
 
-    <!-- 10. Matrix Functions via Spectral/Jordan -->
-    <section class="card">
-      <h2>10) Matrix Functions via Spectral/Jordan Forms</h2>
-      <div class="formula">
-        If $A=PDP^{-1}$,
-        \[
-          f(A)=P\,f(D)\,P^{-1},\quad f(D)=\operatorname{diag}(f(\lambda_i)).
-        \]
-        If $A=PJP^{-1}$ with Jordan $J$, then $f(J)$ uses block-wise series:
-        \[
-          f(J_k(\lambda))=
-          \begin{bmatrix}
-            f(\lambda) & f'(\lambda) & \cdots \\
-            & f(\lambda) & \ddots \\
-            && \ddots
-          \end{bmatrix}.
-        \]
-      </div>
-      <div class="ex">
-        For $A$ diagonalizable, $e^{tA}=P\,e^{tD}\,P^{-1}$ with $e^{tD}=\operatorname{diag}(e^{t\lambda_i})$.
-        For the defective block $J_2(\lambda)$,
-        \(
-          e^{tJ_2(\lambda)}=e^{t\lambda}\begin{bmatrix}1&t\\0&1\end{bmatrix}.
-        \)
-      </div>
-    </section>
+          <!-- 9. Rayleigh Quotient & Power Method -->
+          <section class="card">
+            <h2>9) Rayleigh Quotient &amp; Power Method</h2>
+            <div class="formula">
+              Rayleigh quotient for nonzero $x$:
+              \[
+                R_A(x)=\frac{x^\top A x}{x^\top x}.
+              \]
+              For symmetric $A$, $R_A(x)\in[\lambda_{\min},\lambda_{\max}]$ and attains extrema at eigenvectors.  
+              Power method (dominant eigenpair): iterate $x_{k+1}=\frac{Ax_k}{\|Ax_k\|}$ to obtain the eigenvector of $\rho(A)$ (if unique in magnitude).
+            </div>
+            <div class="ex">
+              For
+              \(
+                S=\begin{bmatrix}5&-2\\-2&5\end{bmatrix}
+              \),
+              starting $x_0=(1,0)^\top$:
+              \(
+                x_1\propto Sx_0=(5,-2)^\top,\;
+                x_2\propto Sx_1,\ \dots
+              \)
+              converges to eigenvector of $\lambda_{\max}=7$, i.e., $\tfrac{1}{\sqrt2}(1,1)^\top$.
+            </div>
+          </section>
 
-  </div>
+          <!-- 10. Matrix Functions via Spectral/Jordan -->
+          <section class="card">
+            <h2>10) Matrix Functions via Spectral/Jordan Forms</h2>
+            <div class="formula">
+              If $A=PDP^{-1}$,
+              \[
+                f(A)=P\,f(D)\,P^{-1},\quad f(D)=\operatorname{diag}(f(\lambda_i)).
+              \]
+              If $A=PJP^{-1}$ with Jordan $J$, then $f(J)$ uses block-wise series:
+              \[
+                f(J_k(\lambda))=
+                \begin{bmatrix}
+                  f(\lambda) & f'(\lambda) & \cdots \\
+                  & f(\lambda) & \ddots \\
+                  && \ddots
+                \end{bmatrix}.
+              \]
+            </div>
+            <div class="ex">
+              For $A$ diagonalizable, $e^{tA}=P\,e^{tD}\,P^{-1}$ with $e^{tD}=\operatorname{diag}(e^{t\lambda_i})$.
+              For the defective block $J_2(\lambda)$,
+              \(
+                e^{tJ_2(\lambda)}=e^{t\lambda}\begin{bmatrix}1&t\\0&1\end{bmatrix}.
+              \)
+            </div>
+          </section>
 
-  <h2>Summary Properties</h2>
-  <ul class="tight">
-    <li>Diagonalizable $\iff$ $n$ independent eigenvectors (over $\mathbb{C}$).</li>
-    <li>Spectral theorem: symmetric $A$ diagonalized by orthogonal $Q$.</li>
-    <li>Schur: $A=QTQ^*$ with $T$ upper triangular (eigs on diagonal).</li>
-    <li>$\rho(A)=\max|\lambda_i|$, equals $\lim_{k\to\infty}\|A^k\|^{1/k}$.</li>
-    <li>Gershgorin bounds localize eigenvalues.</li>
-    <li>SVD always exists (rectangular too); $\sigma_i^2$ are eigenvalues of $A^\top A$.</li>
-    <li>Power method converges to dominant eigenvector under mild gaps.</li>
-  </ul>
+        </div>
+
+        <h2>Summary Properties</h2>
+        <ul class="tight">
+          <li>Diagonalizable $\iff$ $n$ independent eigenvectors (over $\mathbb{C}$).</li>
+          <li>Spectral theorem: symmetric $A$ diagonalized by orthogonal $Q$.</li>
+          <li>Schur: $A=QTQ^*$ with $T$ upper triangular (eigs on diagonal).</li>
+          <li>$\rho(A)=\max|\lambda_i|$, equals $\lim_{k\to\infty}\|A^k\|^{1/k}$.</li>
+          <li>Gershgorin bounds localize eigenvalues.</li>
+          <li>SVD always exists (rectangular too); $\sigma_i^2$ are eigenvalues of $A^\top A$.</li>
+          <li>Power method converges to dominant eigenvector under mild gaps.</li>
+        </ul>
+    </article>
+
+        <nav class="chapter-nav bottom">
+      <a href="page3 Matrix.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <a href="page5Calculus.html">Next Chapter -&gt;</a>
+    </nav>
+
+    <footer class="site-footer">
+      <p>Digital Notes Series - Chapter 4</p>
+    </footer>
+  </main>
 </body>
 </html>
+

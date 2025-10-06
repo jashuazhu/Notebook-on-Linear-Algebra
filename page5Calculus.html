@@ -1,257 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Matrix Calculus — Wide Layout with Numerical Examples</title>
-
-<!-- MathJax -->
-<script>
-  window.MathJax = {
-    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']],
-           displayMath: [['\\[','\\]'], ['$$','$$']],
-           processEscapes: true },
-    options: { skipHtmlTags:['script','noscript','style','textarea','pre','code'] }
-  };
-</script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-<style>
-:root {
-  --bg:#fff; --fg:#0b1221; --muted:#5f6b7a;
-  --card:#f7f9fc; --border:#e6ecf2; --accent:#0e7afe;
-}
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      color:var(--fg);background:var(--bg);margin:3rem;line-height:1.55;max-width:1500px;}
-h1{margin-bottom:1rem;} h2{margin-top:2rem;}
-.grid{display:grid;gap:2rem;grid-template-columns:1fr;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;
-      padding:2rem 2.5rem;font-size:1.05rem;}
-.formula{margin:.6rem 0 1rem 0;font-size:1.05rem;}
-.ex{background:#fff;border:1px dashed var(--border);border-radius:10px;
-    padding:1rem;margin-top:.75rem;font-family:Consolas,"Courier New",monospace;
-    font-size:1rem;overflow-x:auto;}
-ul.tight{margin:.5rem 0 .8rem 1.5rem;}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 5 - Matrix Calculus</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-<h1>Matrix Calculus — Derivatives, Gradients &amp; Differentials (with Numerical Examples)</h1>
-<p class="muted">Each section includes both symbolic formulas and concrete numeric examples.</p>
+  <main class="book-page">
+    <header class="book-header">
+      <p class="lead">Chapter 5</p>
+      <h1>Matrix Calculus</h1>
+      <p class="muted">Gradients, Jacobians, and differentials for scalar and matrix mappings.</p>
+    </header>
 
-<div class="grid">
+        <nav class="chapter-nav">
+      <a href="page4Eigenvalue.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <span class="disabled">Next Chapter</span>
+    </nav>
 
-<!-- 1 -->
-<section class="card">
-<h2>1) Differential Definition</h2>
-<div class="formula">
-For scalar $f(X)$,
-\[
-df=\operatorname{tr}\!\big((\nabla_X f)^\top dX\big).
-\]
-</div>
-<div class="ex">
-Example: $f(X)=\operatorname{tr}(A^\top X)$,  
-$A=\begin{bmatrix}1&2\\3&4\end{bmatrix}, X=\begin{bmatrix}x_1&x_2\\x_3&x_4\end{bmatrix}$.  
-Then $df=1\,dx_1+2\,dx_2+3\,dx_3+4\,dx_4$, so  
-$\nabla_X f=A$.
-</div>
-</section>
+    <article>
+      <div class="grid">
 
-<!-- 2 -->
-<section class="card">
-<h2>2) Vector Derivatives (up to Third Order)</h2>
-<div class="formula">
-\[
-\nabla_x(a^\top x)=a,\qquad 
-\nabla_x(x^\top x)=2x,\qquad
-\nabla_x(x^\top A x)=(A+A^\top)x.
-\]
-Third-order derivative tensor:
-\[
-[\nabla^{(3)}f(x)]_{ijk}=\frac{\partial^3 f}{\partial x_i\partial x_j\partial x_k}.
-\]
-</div>
-<div class="ex">
-Take $a=\begin{bmatrix}1\\2\end{bmatrix}$, 
-$A=\begin{bmatrix}2&1\\1&3\end{bmatrix}$,
-$x=\begin{bmatrix}1\\3\end{bmatrix}$.  
-Then  
-$\nabla_x(a^\top x)=a=[1,2]^\top$,  
-$\nabla_x(x^\top x)=2[1,3]^\top=[2,6]^\top$,  
-$\nabla_x(x^\top A x)=(A+A^\top)x=2A x=2[5,10]^\top=[10,20]^\top$.  
-For $f(x)=(a^\top x)^3=(1+6)^3=343$,  
-$\nabla f=3(a^\top x)^2 a=3(7)^2[1,2]^\top=[147,294]^\top$,  
-$\nabla^2f=6(a^\top x)aa^\top=42\!\begin{bmatrix}1&2\\2&4\end{bmatrix}$,  
-$\nabla^{(3)}f=6a^{\otimes3}$.
-</div>
-</section>
+      <!-- 1 -->
+      <section class="card">
+      <h2>1) Differential Definition</h2>
+      <div class="formula">
+      For scalar $f(X)$,
+      \[
+      df=\operatorname{tr}\!\big((\nabla_X f)^\top dX\big).
+      \]
+      </div>
+      <div class="ex">
+      Example: $f(X)=\operatorname{tr}(A^\top X)$,  
+      $A=\begin{bmatrix}1&2\\3&4\end{bmatrix}, X=\begin{bmatrix}x_1&x_2\\x_3&x_4\end{bmatrix}$.  
+      Then $df=1\,dx_1+2\,dx_2+3\,dx_3+4\,dx_4$, so  
+      $\nabla_X f=A$.
+      </div>
+      </section>
 
-<!-- 3 -->
-<section class="card">
-<h2>3) Matrix Derivative Rules</h2>
-<div class="formula">
-\[
-\frac{\partial}{\partial X}\operatorname{tr}(A^\top X)=A,\quad
-\frac{\partial}{\partial X}\operatorname{tr}(A X^\top)=A,\quad
-\frac{\partial}{\partial X}\operatorname{tr}(X^\top A X B)=A X(B^\top+B),
-\]
-\[
-\frac{\partial}{\partial X}\det X=\det(X)(X^{-1})^\top,\quad
-\frac{\partial}{\partial X}\ln\det X=(X^{-1})^\top.
-\]
-</div>
-<div class="ex">
-Let  
-$A=\begin{bmatrix}1&2\\3&4\end{bmatrix}$,
-$B=\begin{bmatrix}0&1\\1&0\end{bmatrix}$,
-$X=\begin{bmatrix}2&0\\1&1\end{bmatrix}$.  
-Then  
-$\frac{\partial}{\partial X}\operatorname{tr}(A^\top X)=A$.  
-For $f(X)=\operatorname{tr}(X^\top A X B)$,
-$A X(B^\top+B)=
-\begin{bmatrix}1&2\\3&4\end{bmatrix}
-\!\begin{bmatrix}2&0\\1&1\end{bmatrix}
-\!\begin{bmatrix}1&1\\1&1\end{bmatrix}
-=\begin{bmatrix}3&3\\7&7\end{bmatrix}$.
-<br><br>
-If $X=\begin{bmatrix}1&2\\0&3\end{bmatrix}$,
-$\det(X)=3$,
-$X^{-1}=\begin{bmatrix}1&-\tfrac23\\0&\tfrac13\end{bmatrix}$,
-so  
-$\nabla_X\det(X)=3(X^{-1})^\top=
-\begin{bmatrix}3&0\\-2&1\end{bmatrix}$,
-and $\nabla_X\ln\det(X)=(X^{-1})^\top=\begin{bmatrix}1&0\\-\tfrac23&\tfrac13\end{bmatrix}$.
-</div>
-</section>
+      <!-- 2 -->
+      <section class="card">
+      <h2>2) Vector Derivatives (up to Third Order)</h2>
+      <div class="formula">
+      \[
+      \nabla_x(a^\top x)=a,\qquad 
+      \nabla_x(x^\top x)=2x,\qquad
+      \nabla_x(x^\top A x)=(A+A^\top)x.
+      \]
+      Third-order derivative tensor:
+      \[
+      [\nabla^{(3)}f(x)]_{ijk}=\frac{\partial^3 f}{\partial x_i\partial x_j\partial x_k}.
+      \]
+      </div>
+      <div class="ex">
+      Take $a=\begin{bmatrix}1\\2\end{bmatrix}$, 
+      $A=\begin{bmatrix}2&1\\1&3\end{bmatrix}$,
+      $x=\begin{bmatrix}1\\3\end{bmatrix}$.  
+      Then  
+      $\nabla_x(a^\top x)=a=[1,2]^\top$,  
+      $\nabla_x(x^\top x)=2[1,3]^\top=[2,6]^\top$,  
+      $\nabla_x(x^\top A x)=(A+A^\top)x=2A x=2[5,10]^\top=[10,20]^\top$.  
+      For $f(x)=(a^\top x)^3=(1+6)^3=343$,  
+      $\nabla f=3(a^\top x)^2 a=3(7)^2[1,2]^\top=[147,294]^\top$,  
+      $\nabla^2f=6(a^\top x)aa^\top=42\!\begin{bmatrix}1&2\\2&4\end{bmatrix}$,  
+      $\nabla^{(3)}f=6a^{\otimes3}$.
+      </div>
+      </section>
 
-<!-- 4 -->
-<section class="card">
-<h2>4) Trace Identities</h2>
-<div class="formula">
-\[
-\operatorname{tr}(AB)=\operatorname{tr}(BA),\quad 
-\|A\|_F^2=\operatorname{tr}(A^\top A).
-\]
-</div>
-<div class="ex">
-For $A=\begin{bmatrix}1&2\\3&4\end{bmatrix}$, $B=\begin{bmatrix}0&1\\1&0\end{bmatrix}$:  
-$\operatorname{tr}(AB)=\operatorname{tr}(BA)=2+3=5$.  
-Also $\|A\|_F^2=1+4+9+16=30$.
-</div>
-</section>
+      <!-- 3 -->
+      <section class="card">
+      <h2>3) Matrix Derivative Rules</h2>
+      <div class="formula">
+      \[
+      \frac{\partial}{\partial X}\operatorname{tr}(A^\top X)=A,\quad
+      \frac{\partial}{\partial X}\operatorname{tr}(A X^\top)=A,\quad
+      \frac{\partial}{\partial X}\operatorname{tr}(X^\top A X B)=A X(B^\top+B),
+      \]
+      \[
+      \frac{\partial}{\partial X}\det X=\det(X)(X^{-1})^\top,\quad
+      \frac{\partial}{\partial X}\ln\det X=(X^{-1})^\top.
+      \]
+      </div>
+      <div class="ex">
+      Let  
+      $A=\begin{bmatrix}1&2\\3&4\end{bmatrix}$,
+      $B=\begin{bmatrix}0&1\\1&0\end{bmatrix}$,
+      $X=\begin{bmatrix}2&0\\1&1\end{bmatrix}$.  
+      Then  
+      $\frac{\partial}{\partial X}\operatorname{tr}(A^\top X)=A$.  
+      For $f(X)=\operatorname{tr}(X^\top A X B)$,
+      $A X(B^\top+B)=
+      \begin{bmatrix}1&2\\3&4\end{bmatrix}
+      \!\begin{bmatrix}2&0\\1&1\end{bmatrix}
+      \!\begin{bmatrix}1&1\\1&1\end{bmatrix}
+      =\begin{bmatrix}3&3\\7&7\end{bmatrix}$.
+      <br><br>
+      If $X=\begin{bmatrix}1&2\\0&3\end{bmatrix}$,
+      $\det(X)=3$,
+      $X^{-1}=\begin{bmatrix}1&-\tfrac23\\0&\tfrac13\end{bmatrix}$,
+      so  
+      $\nabla_X\det(X)=3(X^{-1})^\top=
+      \begin{bmatrix}3&0\\-2&1\end{bmatrix}$,
+      and $\nabla_X\ln\det(X)=(X^{-1})^\top=\begin{bmatrix}1&0\\-\tfrac23&\tfrac13\end{bmatrix}$.
+      </div>
+      </section>
 
-<!-- 5 -->
-<section class="card">
-<h2>5) Differential Formulas</h2>
-<div class="formula">
-\[
-d(x^\top A y)=(A y)^\top dx+(A^\top x)^\top dy+x^\top(dA)y,
-\]
-\[
-d(A^{-1})=-A^{-1}(dA)A^{-1},\qquad
-d(\det A)=\det(A)\operatorname{tr}(A^{-1}dA).
-\]
-</div>
-<div class="ex">
-Let $A=\begin{bmatrix}t&1\\0&1\end{bmatrix}$,  
-then $A^{-1}=\begin{bmatrix}1/t&-1/t\\0&1\end{bmatrix}$,  
-$d(A^{-1})=-A^{-1}(dA)A^{-1}=
--\begin{bmatrix}1/t&-1/t\\0&1\end{bmatrix}
-\!\begin{bmatrix}dt&0\\0&0\end{bmatrix}
-\!\begin{bmatrix}1/t&-1/t\\0&1\end{bmatrix}
-=-\begin{bmatrix}dt/t^2&-dt/t^2\\0&0\end{bmatrix}$.
-</div>
-</section>
+      <!-- 4 -->
+      <section class="card">
+      <h2>4) Trace Identities</h2>
+      <div class="formula">
+      \[
+      \operatorname{tr}(AB)=\operatorname{tr}(BA),\quad 
+      \|A\|_F^2=\operatorname{tr}(A^\top A).
+      \]
+      </div>
+      <div class="ex">
+      For $A=\begin{bmatrix}1&2\\3&4\end{bmatrix}$, $B=\begin{bmatrix}0&1\\1&0\end{bmatrix}$:  
+      $\operatorname{tr}(AB)=\operatorname{tr}(BA)=2+3=5$.  
+      Also $\|A\|_F^2=1+4+9+16=30$.
+      </div>
+      </section>
 
-<!-- 6 -->
-<section class="card">
-<h2>6) Jacobian &amp; Hessian</h2>
-<div class="formula">
-\[
-J_{ij}=\frac{\partial f_i}{\partial x_j},\qquad
-H_{ij}=\frac{\partial^2 f}{\partial x_i\partial x_j}.
-\]
-For $f(x)=\tfrac12x^\top Qx+b^\top x$: $\nabla f=Qx+b$, $H=Q$.
-</div>
-<div class="ex">
-Let $Q=\begin{bmatrix}2&1\\1&2\end{bmatrix}$, $b=\begin{bmatrix}1\\-1\end{bmatrix}$, $x=\begin{bmatrix}2\\3\end{bmatrix}$.  
-$\nabla f=Qx+b=\begin{bmatrix}2&1\\1&2\end{bmatrix}\!\begin{bmatrix}2\\3\end{bmatrix}+\begin{bmatrix}1\\-1\end{bmatrix}
-=\begin{bmatrix}8\\7\end{bmatrix}$,  
-$H=Q$.
-</div>
-</section>
+      <!-- 5 -->
+      <section class="card">
+      <h2>5) Differential Formulas</h2>
+      <div class="formula">
+      \[
+      d(x^\top A y)=(A y)^\top dx+(A^\top x)^\top dy+x^\top(dA)y,
+      \]
+      \[
+      d(A^{-1})=-A^{-1}(dA)A^{-1},\qquad
+      d(\det A)=\det(A)\operatorname{tr}(A^{-1}dA).
+      \]
+      </div>
+      <div class="ex">
+      Let $A=\begin{bmatrix}t&1\\0&1\end{bmatrix}$,  
+      then $A^{-1}=\begin{bmatrix}1/t&-1/t\\0&1\end{bmatrix}$,  
+      $d(A^{-1})=-A^{-1}(dA)A^{-1}=
+      -\begin{bmatrix}1/t&-1/t\\0&1\end{bmatrix}
+      \!\begin{bmatrix}dt&0\\0&0\end{bmatrix}
+      \!\begin{bmatrix}1/t&-1/t\\0&1\end{bmatrix}
+      =-\begin{bmatrix}dt/t^2&-dt/t^2\\0&0\end{bmatrix}$.
+      </div>
+      </section>
 
-<!-- 7 -->
-<section class="card">
-<h2>7) Gradient of Norms</h2>
-<div class="formula">
-\[
-\nabla_x\|x\|_2=\frac{x}{\|x\|_2},\qquad 
-\nabla_x\tfrac12\|Ax-b\|_2^2=A^\top(Ax-b).
-\]
-</div>
-<div class="ex">
-Let $A=\begin{bmatrix}1&2\\0&1\end{bmatrix}$, $b=\begin{bmatrix}1\\2\end{bmatrix}$, $x=\begin{bmatrix}1\\0\end{bmatrix}$.  
-Then $Ax-b=\begin{bmatrix}0\\-2\end{bmatrix}$,  
-$\nabla f=A^\top(Ax-b)=\begin{bmatrix}1&0\\2&1\end{bmatrix}\!\begin{bmatrix}0\\-2\end{bmatrix}=[0,-2]^\top+[-4,-2]^\top=[-4,-2]^\top$.
-Also $\nabla_x\|x\|_2=x/\|x\|_2=[1,0]^\top/1=[1,0]^\top$.
-</div>
-</section>
+      <!-- 6 -->
+      <section class="card">
+      <h2>6) Jacobian &amp; Hessian</h2>
+      <div class="formula">
+      \[
+      J_{ij}=\frac{\partial f_i}{\partial x_j},\qquad
+      H_{ij}=\frac{\partial^2 f}{\partial x_i\partial x_j}.
+      \]
+      For $f(x)=\tfrac12x^\top Qx+b^\top x$: $\nabla f=Qx+b$, $H=Q$.
+      </div>
+      <div class="ex">
+      Let $Q=\begin{bmatrix}2&1\\1&2\end{bmatrix}$, $b=\begin{bmatrix}1\\-1\end{bmatrix}$, $x=\begin{bmatrix}2\\3\end{bmatrix}$.  
+      $\nabla f=Qx+b=\begin{bmatrix}2&1\\1&2\end{bmatrix}\!\begin{bmatrix}2\\3\end{bmatrix}+\begin{bmatrix}1\\-1\end{bmatrix}
+      =\begin{bmatrix}8\\7\end{bmatrix}$,  
+      $H=Q$.
+      </div>
+      </section>
 
-<!-- 8 -->
-<section class="card">
-<h2>8) Vectorization &amp; Kronecker Derivatives</h2>
-<div class="formula">
-\[
-\operatorname{vec}(AXB)=(B^\top\otimes A)\operatorname{vec}(X).
-\]
-</div>
-<div class="ex">
-Let $A=\begin{bmatrix}1&0\\2&1\end{bmatrix}$, 
-$B=\begin{bmatrix}1&1\\0&1\end{bmatrix}$,
-$X=\begin{bmatrix}1&2\\3&4\end{bmatrix}$.  
-Compute $AXB=\begin{bmatrix}1&1\\2&3\end{bmatrix}\!\begin{bmatrix}1&1\\0&1\end{bmatrix}=\begin{bmatrix}1&2\\2&5\end{bmatrix}$.  
-Vectorizing both sides yields identical result to $(B^\top\otimes A)\operatorname{vec}(X)$.
-</div>
-</section>
+      <!-- 7 -->
+      <section class="card">
+      <h2>7) Gradient of Norms</h2>
+      <div class="formula">
+      \[
+      \nabla_x\|x\|_2=\frac{x}{\|x\|_2},\qquad 
+      \nabla_x\tfrac12\|Ax-b\|_2^2=A^\top(Ax-b).
+      \]
+      </div>
+      <div class="ex">
+      Let $A=\begin{bmatrix}1&2\\0&1\end{bmatrix}$, $b=\begin{bmatrix}1\\2\end{bmatrix}$, $x=\begin{bmatrix}1\\0\end{bmatrix}$.  
+      Then $Ax-b=\begin{bmatrix}0\\-2\end{bmatrix}$,  
+      $\nabla f=A^\top(Ax-b)=\begin{bmatrix}1&0\\2&1\end{bmatrix}\!\begin{bmatrix}0\\-2\end{bmatrix}=[0,-2]^\top+[-4,-2]^\top=[-4,-2]^\top$.
+      Also $\nabla_x\|x\|_2=x/\|x\|_2=[1,0]^\top/1=[1,0]^\top$.
+      </div>
+      </section>
 
-<!-- 9 -->
-<section class="card">
-<h2>9) Gradients of Log-Det and Inverse</h2>
-<div class="formula">
-\[
-\nabla_X\ln\det X=(X^{-1})^\top,\qquad 
-\nabla_X\operatorname{tr}(X^{-1}A)=-X^{-T}A^TX^{-T}.
-\]
-</div>
-<div class="ex">
-$X=\begin{bmatrix}2&0\\0&1\end{bmatrix}$, $A=\begin{bmatrix}1&0\\0&1\end{bmatrix}$ →  
-$X^{-1}=\begin{bmatrix}1/2&0\\0&1\end{bmatrix}$, so  
-$\nabla_X\ln\det(X)=(X^{-1})^\top=X^{-1}$,  
-$\nabla_X\operatorname{tr}(X^{-1}A)=-X^{-T}A^TX^{-T}=-\begin{bmatrix}1/4&0\\0&1\end{bmatrix}$.
-</div>
-</section>
+      <!-- 8 -->
+      <section class="card">
+      <h2>8) Vectorization &amp; Kronecker Derivatives</h2>
+      <div class="formula">
+      \[
+      \operatorname{vec}(AXB)=(B^\top\otimes A)\operatorname{vec}(X).
+      \]
+      </div>
+      <div class="ex">
+      Let $A=\begin{bmatrix}1&0\\2&1\end{bmatrix}$, 
+      $B=\begin{bmatrix}1&1\\0&1\end{bmatrix}$,
+      $X=\begin{bmatrix}1&2\\3&4\end{bmatrix}$.  
+      Compute $AXB=\begin{bmatrix}1&1\\2&3\end{bmatrix}\!\begin{bmatrix}1&1\\0&1\end{bmatrix}=\begin{bmatrix}1&2\\2&5\end{bmatrix}$.  
+      Vectorizing both sides yields identical result to $(B^\top\otimes A)\operatorname{vec}(X)$.
+      </div>
+      </section>
 
-<!-- 10 -->
-<section class="card">
-<h2>10) Second-Order Differentials &amp; Applications</h2>
-<div class="formula">
-\[
-d^2f=(dx)^\top H dx,\qquad 
-d^2\operatorname{tr}(X^\top A X B)=2\,\operatorname{tr}((dX)^\top A\,dX\,B).
-\]
-</div>
-<div class="ex">
-Let $A=\begin{bmatrix}1&0\\0&2\end{bmatrix}$, $B=\begin{bmatrix}2&1\\1&1\end{bmatrix}$, and $dX=\begin{bmatrix}dx_1&dx_2\\0&0\end{bmatrix}$.  
-Then $(dX)^\top A\,dX\,B$ =
-$\begin{bmatrix}dx_1&0\\dx_2&0\end{bmatrix}
-\!\begin{bmatrix}1&0\\0&2\end{bmatrix}
-\!\begin{bmatrix}dx_1&dx_2\\0&0\end{bmatrix}
-\!\begin{bmatrix}2&1\\1&1\end{bmatrix}$.
-Expanding yields $d^2f=2[(dx_1)^2(2)+dx_1dx_2(1)]$ illustrating curvature contribution.
-</div>
-</section>
+      <!-- 9 -->
+      <section class="card">
+      <h2>9) Gradients of Log-Det and Inverse</h2>
+      <div class="formula">
+      \[
+      \nabla_X\ln\det X=(X^{-1})^\top,\qquad 
+      \nabla_X\operatorname{tr}(X^{-1}A)=-X^{-T}A^TX^{-T}.
+      \]
+      </div>
+      <div class="ex">
+      $X=\begin{bmatrix}2&0\\0&1\end{bmatrix}$, $A=\begin{bmatrix}1&0\\0&1\end{bmatrix}$ →  
+      $X^{-1}=\begin{bmatrix}1/2&0\\0&1\end{bmatrix}$, so  
+      $\nabla_X\ln\det(X)=(X^{-1})^\top=X^{-1}$,  
+      $\nabla_X\operatorname{tr}(X^{-1}A)=-X^{-T}A^TX^{-T}=-\begin{bmatrix}1/4&0\\0&1\end{bmatrix}$.
+      </div>
+      </section>
 
-</div>
+      <!-- 10 -->
+      <section class="card">
+      <h2>10) Second-Order Differentials &amp; Applications</h2>
+      <div class="formula">
+      \[
+      d^2f=(dx)^\top H dx,\qquad 
+      d^2\operatorname{tr}(X^\top A X B)=2\,\operatorname{tr}((dX)^\top A\,dX\,B).
+      \]
+      </div>
+      <div class="ex">
+      Let $A=\begin{bmatrix}1&0\\0&2\end{bmatrix}$, $B=\begin{bmatrix}2&1\\1&1\end{bmatrix}$, and $dX=\begin{bmatrix}dx_1&dx_2\\0&0\end{bmatrix}$.  
+      Then $(dX)^\top A\,dX\,B$ =
+      $\begin{bmatrix}dx_1&0\\dx_2&0\end{bmatrix}
+      \!\begin{bmatrix}1&0\\0&2\end{bmatrix}
+      \!\begin{bmatrix}dx_1&dx_2\\0&0\end{bmatrix}
+      \!\begin{bmatrix}2&1\\1&1\end{bmatrix}$.
+      Expanding yields $d^2f=2[(dx_1)^2(2)+dx_1dx_2(1)]$ illustrating curvature contribution.
+      </div>
+      </section>
+
+      </div>
+    </article>
+
+        <nav class="chapter-nav bottom">
+      <a href="page4Eigenvalue.html">&lt;- Previous Chapter</a>
+      <a class="index-link" href="index.html">Back to Index</a>
+      <span class="disabled">Next Chapter</span>
+    </nav>
+
+    <footer class="site-footer">
+      <p>Digital Notes Series - Chapter 5</p>
+    </footer>
+  </main>
 </body>
 </html>
+
